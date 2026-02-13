@@ -1,0 +1,195 @@
+level,word,meaning_ja,Part_of_Speech,category,pronunciation,example_en,example_ja
+5級,be,〜である,動詞,be動詞,/biː/,I want to be a teacher.,私は先生になりたいです。
+5級,do,する,動詞,基本動詞,/duː/,I do my homework.,私は宿題をします。
+5級,go,行く,動詞,基本動詞,/ɡoʊ/,I go to school.,私は学校に行きます。
+5級,come,来る,動詞,基本動詞,/kʌm/,Come to my house.,私の家に来てください。
+5級,have,持っている,動詞,基本動詞,/hæv/,I have a dog.,私は犬を飼っています。
+5級,like,好き,動詞,基本動詞,/laɪk/,I like music.,私は音楽が好きです。
+5級,want,欲しい,動詞,基本動詞,/wɑːnt/,I want an apple.,りんごが欲しいです。
+5級,play,遊ぶ・する,動詞,基本動詞,/pleɪ/,I play tennis.,私はテニスをします。
+5級,study,勉強する,動詞,基本動詞,/ˈstʌdi/,I study math.,私は算数を勉強します。
+5級,speak,話す,動詞,基本動詞,/spiːk/,I speak English.,私は英語を話します。
+5級,read,読む,動詞,基本動詞,/riːd/,I read books.,私は本を読みます。
+5級,write,書く,動詞,基本動詞,/raɪt/,Write your name.,名前を書いてください。
+5級,eat,食べる,動詞,基本動詞,/iːt/,I eat lunch.,私は昼食を食べます。
+5級,drink,飲む,動詞,基本動詞,/drɪŋk/,I drink milk.,私は牛乳を飲みます。
+5級,see,見る・会う,動詞,基本動詞,/siː/,I see a bird.,鳥が見えます。
+5級,watch,じっと見る,動詞,基本動詞,/wɑːtʃ/,I watch TV.,私はテレビを見ます。
+5級,listen,聞く,動詞,基本動詞,/ˈlɪsən/,Listen to me.,私の話を聞いてください。
+5級,help,助ける,動詞,基本動詞,/help/,I help my mother.,私は母を手伝います。
+5級,make,作る,動詞,基本動詞,/meɪk/,I make dinner.,私は夕食を作ります。
+5級,buy,買う,動詞,基本動詞,/baɪ/,I buy a pen.,私はペンを買います。
+5級,know,知っている,動詞,基本動詞,/noʊ/,I know him.,私は彼を知っています。
+5級,think,思う,動詞,基本動詞,/θɪnk/,I think so.,私はそう思います。
+5級,use,使う,動詞,基本動詞,/juːz/,I use this computer.,私はこのコンピュータを使います。
+5級,take,取る・連れて行く,動詞,基本動詞,/teɪk/,I take a picture.,写真を撮ります。
+5級,get,手に入れる,動詞,基本動詞,/ɡet/,I get a present.,プレゼントをもらいます。
+5級,say,言う,動詞,基本動詞,/seɪ/,Say hello.,こんにちはと言いなさい。
+5級,tell,伝える,動詞,基本動詞,/tel/,Tell me the story.,その話を教えて。
+5級,teach,教える,動詞,基本動詞,/tiːtʃ/,He teaches English.,彼は英語を教えます。
+5級,learn,学ぶ,動詞,基本動詞,/lɜːrn/,I learn piano.,私はピアノを習っています。
+5級,start,始める,動詞,基本動詞,/stɑːrt/,The game starts at ten.,試合は10時に始まります。
+5級,morning,朝,名詞,時間,/ˈmɔːrnɪŋ/,Good morning.,おはよう。
+5級,afternoon,午後,名詞,時間,/ˌæftərˈnuːn/,In the afternoon.,午後に。
+5級,evening,夕方,名詞,時間,/ˈiːvnɪŋ/,In the evening.,夕方に。
+5級,night,夜,名詞,時間,/naɪt/,Good night.,おやすみなさい。
+5級,today,今日,名詞・副詞,時間,/təˈdeɪ/,It is sunny today.,今日は晴れです。
+5級,tomorrow,明日,名詞・副詞,時間,/təˈmɔːroʊ/,See you tomorrow.,また明日。
+5級,week,週,名詞,時間,/wiːk/,Every week.,毎週。
+5級,year,年,名詞,時間,/jɪər/,New Year.,新年。
+5級,time,時間,名詞,時間,/taɪm/,What time is it?,何時ですか？
+5級,father,父,名詞,家族,/ˈfɑːðər/,My father is tall.,父は背が高い。
+5級,mother,母,名詞,家族,/ˈmʌðər/,My mother is kind.,母は親切です。
+5級,brother,兄・弟,名詞,家族,/ˈbrʌðər/,I have a brother.,私には兄弟がいます。
+5級,sister,姉・妹,名詞,家族,/ˈsɪstər/,My sister is cute.,私の妹はかわいい。
+5級,friend,友達,名詞,人,/frend/,He is my friend.,彼は私の友達です。
+5級,teacher,先生,名詞,人,/ˈtiːtʃər/,She is a teacher.,彼女は先生です。
+5級,student,生徒,名詞,人,/ˈstuːdənt/,I am a student.,私は学生です。
+5級,school,学校,名詞,場所・建物,/skuːl/,I go to school.,私は学校に行きます。
+5級,class,授業・クラス,名詞,場所・建物,/klæs/,English class.,英語の授業。
+5級,homework,宿題,名詞,学校関連,/ˈhoʊmwɜːrk/,Do your homework.,宿題をしなさい。
+5級,book,本,名詞,文房具・物,/bʊk/,Read this book.,この本を読みなさい。
+5級,pen,ペン,名詞,文房具・物,/pen/,Use this pen.,このペンを使って。
+5級,bag,かばん,名詞,文房具・物,/bæɡ/,In my bag.,私のかばんの中に。
+5級,desk,机,名詞,文房具・物,/desk/,On the desk.,机の上に。
+5級,chair,椅子,名詞,文房具・物,/tʃer/,Sit on the chair.,椅子に座って。
+5級,house,家,名詞,場所・建物,/haʊs/,My house is big.,私の家は大きいです。
+5級,room,部屋,名詞,場所・建物,/room/,My room is clean.,私の部屋はきれいです。
+5級,park,公園,名詞,場所・建物,/pɑːrk/,Go to the park.,公園へ行く。
+5級,station,駅,名詞,場所・建物,/ˈsteɪʃən/,At the station.,駅で。
+5級,shop,店,名詞,場所・建物,/ʃɑːp/,A toy shop.,おもちゃ屋。
+5級,food,食べ物,名詞,食べ物・飲み物,/fuːd/,I like Japanese food.,私は日本食が好きです。
+5級,water,水,名詞,食べ物・飲み物,/ˈwɔːtər/,Drink water.,水を飲んで。
+5級,breakfast,朝食,名詞,食べ物・飲み物,/ˈbrekfəst/,Eat breakfast.,朝食を食べる。
+5級,lunch,昼食,名詞,食べ物・飲み物,/lʌntʃ/,Lunch time.,昼食の時間。
+5級,dinner,夕食,名詞,食べ物・飲み物,/ˈdɪnər/,Make dinner.,夕食を作る。
+5級,soccer,サッカー,名詞,スポーツ・楽器,/ˈsɑːkər/,Play soccer.,サッカーをする。
+5級,tennis,テニス,名詞,スポーツ・楽器,/ˈtenɪs/,Play tennis.,テニスをする。
+5級,piano,ピアノ,名詞,スポーツ・楽器,/piˈænoʊ/,Play the piano.,ピアノを弾く。
+5級,guitar,ギター,名詞,スポーツ・楽器,/ɡɪˈtɑːr/,Play the guitar.,ギターを弾く。
+5級,song,歌,名詞,スポーツ・楽器,/sɔːŋ/,Sing a song.,歌を歌う。
+5級,big,大きい,形容詞,様子・程度,/bɪɡ/,A big tree.,大きな木。
+5級,small,小さい,形容詞,様子・程度,/smɔːl/,A small bird.,小さな鳥。
+5級,new,新しい,形容詞,様子・程度,/nuː/,New shoes.,新しい靴。
+5級,old,古い,形容詞,様子・程度,/oʊld/,Old books.,古い本。
+5級,long,長い,形容詞,様子・程度,/lɔːŋ/,A long pencil.,長い鉛筆。
+5級,short,短い,形容詞,様子・程度,/ʃɔːrt/,A short hair.,短い髪。
+5級,tall,背が高い,形容詞,様子・程度,/tɔːl/,A tall boy.,背の高い男の子。
+5級,high,高い,形容詞,様子・程度,/haɪ/,A high mountain.,高い山。
+5級,hot,暑い,形容詞,様子・程度,/hɑːt/,It is hot.,暑いです。
+5級,cold,寒い,形容詞,様子・程度,/koʊld/,It is cold.,寒いです。
+5級,good,良い,形容詞,様子・程度,/ɡud/,Good job.,よくやった。
+5級,happy,幸せな,形容詞,様子・程度,/ˈhæpi/,I am happy.,私は幸せです。
+5級,busy,忙しい,形容詞,様子・程度,/ˈbɪzi/,I am busy.,私は忙しいです。
+5級,difficult,難しい,形容詞,様子・程度,/ˈdɪfɪkəlt/,English is difficult.,英語は難しい。
+5級,easy,簡単な,形容詞,様子・程度,/ˈiːzi/,Math is easy.,算数は簡単だ。
+5級,what,何,疑問詞,疑問詞,/wʌt/,What is this?,これは何ですか？
+5級,who,誰,疑問詞,疑問詞,/huː/,Who is he?,彼は誰ですか？
+5級,where,どこ,疑問詞,疑問詞,/wer/,Where is my dog?,私の犬はどこ？
+5級,when,いつ,疑問詞,疑問詞,/wen/,When is your birthday?,誕生日はいつ？
+5級,how,どうやって,疑問詞,疑問詞,/haʊ/,How are you?,元気ですか？
+5級,which,どちら,疑問詞,疑問詞,/wɪtʃ/,Which one?,どっち？
+5級,many,たくさんの,形容詞,様子・程度,/ˈmeni/,Many cats.,たくさんの猫。
+5級,every,毎〜,形容詞,様子・程度,/ˈevri/,Every day.,毎日。
+5級,always,いつも,副詞,頻度・程度,/ˈɔːlweɪz/,Always happy.,いつも幸せ。
+5級,often,よく,副詞,頻度・程度,/ˈɔːfən/,I often go there.,私はよくそこへ行きます。
+5級,sometimes,時々,副詞,頻度・程度,/ˈsʌmtaɪmz/,Sometimes I run.,時々走ります。
+5級,here,ここ,副詞,場所・方向,/hɪər/,Come here.,ここに来て。
+5級,there,そこ,副詞,場所・方向,/ðer/,Go there.,そこへ行って。
+5級,very,とても,副詞,頻度・程度,/ˈveri/,Very good.,とても良い。
+5級,now,今,副詞,時間,/naʊ/,Now I am free.,今、私は暇です。
+5級,Monday,月曜日,名詞,曜日,/ˈmʌndeɪ/,I play soccer on Monday.,私は月曜日にサッカーをします。
+5級,Tuesday,火曜日,名詞,曜日,/ˈtuːzdeɪ/,We have English class on Tuesday.,火曜日に英語の授業があります。
+5級,Wednesday,水曜日,名詞,曜日,/ˈwenzdeɪ/,It is Wednesday today.,今日は水曜日です。
+5級,Thursday,木曜日,名詞,曜日,/ˈθɜːrzdeɪ/,I go to the library on Thursday.,私は木曜日に図書館へ行きます。
+5級,Friday,金曜日,名詞,曜日,/ˈfraɪdeɪ/,School ends on Friday.,金曜日に学校が終わります。
+5級,Saturday,土曜日,名詞,曜日,/ˈsætərdeɪ/,I go to the park on Saturday.,私は土曜日に公園へ行きます。
+5級,Sunday,日曜日,名詞,曜日,/ˈsʌndeɪ/,I sleep a lot on Sunday.,私は日曜日にたくさん寝ます。
+5級,January,1月,名詞,月,/ˈdʒænjuəri/,January is the first month.,1月は最初の月です。
+5級,February,2月,名詞,月,/ˈfebruəri/,February is cold.,2月は寒いです。
+5級,March,3月,名詞,月,/mɑːrtʃ/,Spring starts in March.,3月に春が始まります。
+5級,April,4月,名詞,月,/ˈeɪprəl/,April is a beautiful month.,4月は美しい月です。
+5級,May,5月,名詞,月,/meɪ/,My birthday is in May.,私の誕生日は5月です。
+5級,June,6月,名詞,月,/dʒuːn/,It rains a lot in June.,6月は雨がたくさん降ります。
+5級,July,7月,名詞,月,/dʒuˈlaɪ/,We have summer vacation in July.,7月に夏休みがあります。
+5級,August,8月,名詞,月,/ˈɔːɡəst/,It is very hot in August.,8月はとても暑いです。
+5級,September,9月,名詞,月,/sepˈtembər/,School starts in September.,9月に学校が始まります。
+5級,October,10月,名詞,月,/ɑːkˈtoʊbər/,October is my favorite month.,10月は私の一番好きな月です。
+5級,November,11月,名詞,月,/noʊˈvembər/,November is autumn.,11月は秋です。
+5級,December,12月,名詞,月,/dɪˈsembər/,Christmas is in December.,クリスマスは12月です。
+5級,spring,春,名詞,季節,/sprɪŋ/,I like spring flowers.,私は春の花が好きです。
+5級,summer,夏,名詞,季節,/ˈsʌmər/,I go to the sea in summer.,私は夏に海に行きます。
+5級,autumn,秋,名詞,季節,/ˈɔːtəm/,Autumn is a good season.,秋は良い季節です。
+5級,winter,冬,名詞,季節,/ˈwɪntər/,We have snow in winter.,冬には雪が降ります。
+5級,month,月（期間）,名詞,時間,/mʌnθ/,Which month do you like?,どの月が好きですか？
+5級,weekend,週末,名詞,時間,/ˈwiːkend/,What do you do on the weekend?,週末は何をしますか？
+5級,one,1,名詞,数字,/wʌn/,I have one apple.,私はりんごを1つ持っています。
+5級,two,2,名詞,数字,/tuː/,I have two brothers.,私には2人の兄弟がいます。
+5級,three,3,名詞,数字,/θriː/,There are three birds.,3羽の鳥がいます。
+5級,four,4,名詞,数字,/fɔːr/,I have four pens.,私はペンを4本持っています。
+5級,five,5,名詞,数字,/faɪv/,High five!,ハイタッチ！
+5級,six,6,名詞,数字,/sɪks/,It is six o'clock.,6時です。
+5級,seven,7,名詞,数字,/ˈsevən/,Seven days a week.,1週間は7日です。
+5級,eight,8,名詞,数字,/eɪt/,I have eight books.,私は本を8冊持っています。
+5級,nine,9,名詞,数字,/naɪn/,Nine students are here.,9人の生徒がここにいます。
+5級,ten,10,名詞,数字,/ten/,Count to ten.,10まで数えて。
+5級,eleven,11,名詞,数字,/ɪˈlevən/,Eleven players.,11人の選手。
+5級,twelve,12,名詞,数字,/twelv/,Twelve months in a year.,1年間に12ヶ月。
+5級,thirteen,13,名詞,数字,/ˌθɜːrˈtiːn/,I am thirteen years old.,私は13歳です。
+5級,twenty,20,名詞,数字,/ˈtwenti/,Twenty minutes.,20分間。
+5級,thirty,30,名詞,数字,/ˈθɜːrti/,Thirty dollars.,30ドル。
+5級,fifty,50,名詞,数字,/ˈfɪfti/,Fifty people.,50人の人々。
+5級,hundred,100,名詞,数字,/ˈhʌndrəd/,One hundred yen.,100円。
+5級,first,1番目の,形容詞,順序,/fɜːrst/,This is my first time.,これは私の初めて（1回目）です。
+5級,second,2番目の,形容詞,順序,/ˈsekənd/,My room is on the second floor.,私の部屋は2階にあります。
+5級,third,3番目の,形容詞,順序,/θɜːrd/,The third street.,3番目の通り。
+5級,fourth,4番目の,形容詞,順序,/fɔːrθ/,My birthday is April fourth.,私の誕生日は4月4日です。
+5級,fifth,5番目の,形容詞,順序,/fɪfθ/,The fifth day.,5日目。
+5級,last,最後の,形容詞,順序,/læst/,The last game.,最後の試合。
+5級,number,数字・番号,名詞,数字,/ˈnʌmbər/,What is your favorite number?,あなたの好きな数字は何ですか？
+5級,library,図書館,名詞,場所・建物,/ˈlaɪbreri/,I study in the library.,私は図書館で勉強します。
+5級,hospital,病院,名詞,場所・建物,/ˈhɑːspɪtl/,My mother works at the hospital.,私の母は病院で働いています。
+5級,store,店,名詞,場所・建物,/stɔːr/,A department store.,百貨店。
+5級,restaurant,レストラン,名詞,場所・建物,/ˈrestrɑːnt/,This restaurant is good.,このレストランは良いです。
+5級,kitchen,台所,名詞,場所・建物,/ˈkɪtʃɪn/,My father is in the kitchen.,父は台所にいます。
+5級,garden,庭,名詞,場所・建物,/ˈɡɑːrdn/,We have a small garden.,私たちには小さな庭があります。
+5級,up,上へ,副詞,場所・方向,/ʌp/,Look up at the sky.,空を見上げて。
+5級,down,下へ,副詞,場所・方向,/daʊn/,"Sit down, please.",座ってください。
+5級,right,右,名詞・副詞,場所・方向,/raɪt/,Turn right.,右に曲がって。
+5級,left,左,名詞・副詞,場所・方向,/left/,On the left side.,左側に。
+5級,animal,動物,名詞,動物,/ˈænɪml/,I like animals.,私は動物が好きです。
+5級,dog,犬,名詞,動物,/dɔːɡ/,I walk my dog every morning.,私は毎朝犬の散歩をします。
+5級,cat,猫,名詞,動物,/kæt/,My cat is sleeping now.,私の猫は今寝ています。
+5級,bird,鳥,名詞,動物,/bɜːrd/,Look at that blue bird.,あの青い鳥を見て。
+5級,rabbit,うさぎ,名詞,動物,/ˈræbɪt/,Rabbits have long ears.,うさぎは長い耳を持っています。
+5級,fish,魚,名詞,動物,/fɪʃ/,Can you swim like a fish?,魚のように泳げますか？
+5級,horse,馬,名詞,動物,/hɔːrs/,I want to ride a horse.,私は馬に乗ってみたいです。
+5級,bear,クマ,名詞,動物,/ber/,A big brown bear.,大きな茶色のクマ。
+5級,monkey,さる,名詞,動物,/ˈmʌŋki/,Monkeys like bananas.,さるはバナナが好きです。
+5級,elephant,ぞう,名詞,動物,/ˈelɪfənt/,The elephant is very big.,そのぞうはとても大きいです。
+5級,lion,ライオン,名詞,動物,/ˈlɪən/,The lion is the king.,ライオンは王様です。
+5級,pet,ペット,名詞,動物,/pet/,Do you have any pets?,何かペットを飼っていますか？
+5級,flower,花,名詞,植物・自然,/ˈflaʊər/,These flowers are beautiful.,これらの花は美しいです。
+5級,tree,木,名詞,植物・自然,/triː/,There is a big tree in the park.,公園に大きな木があります。
+5級,leaf,葉,名詞,植物・自然,/liːf/,The leaves are red.,葉っぱが赤いです。
+5級,grass,草,名詞,植物・自然,/ɡræs/,Don't walk on the grass.,草の上を歩かないで。
+5級,cherry,桜・さくらんぼ,名詞,植物・自然,/ˈtʃeri/,Cherry blossoms are pink.,桜の花はピンク色です。
+5級,rose,バラ,名詞,植物・自然,/roʊz/,A red rose.,赤いバラ。
+5級,in,〜の中に,前置詞,前置詞,/ɪn/,The key is in my bag.,鍵は私のかばんの中にあります。
+5級,on,〜の上に,前置詞,前置詞,/ɑːn/,A book is on the desk.,本が机の上にあります。
+5級,under,〜の下に,前置詞,前置詞,/ˈʌndər/,My cat is under the chair.,私の猫は椅子（いす）の下にいます。
+5級,at,〜で（場所・時刻）,前置詞,前置詞,/æt/,I'll see you at seven.,7時に会いましょう。
+5級,by,〜のそばに・〜によって,前置詞,前置詞,/baɪ/,I go to school by bus.,私はバスで学校に行きます。
+5級,with,〜と一緒に,前置詞,前置詞,/wɪð/,I play with my friends.,私は友達と一緒に遊びます。
+5級,for,〜のために・〜の間,前置詞,前置詞,/fɔːr/,This present is for you.,このプレゼントはあなたのためです。
+5級,to,〜へ,前置詞,前置詞,/tuː/,Go to the station.,駅へ行きなさい。
+5級,from,〜から,前置詞,前置詞,/frʌm/,I am from Japan.,私は日本出身です。
+5級,near,〜の近くに,前置詞,前置詞,/nɪər/,Is there a park near here?,この近くに公園はありますか？
+5級,between,〜の間に,前置詞,前置詞,/bɪˈtwiːn/,The shop is between the bank and the library.,その店は銀行と図書館の間にあります。
+5級,before,〜の前に,前置詞,前置詞,/bɪˈfɔːr/,Wash your hands before lunch.,昼食の前に手を洗いなさい。
+5級,after,〜の後に,前置詞,前置詞,/ˈæftər/,I play tennis after school.,私は放課後にテニスをします。
+5級,and,〜と（そして）,接続詞,接続詞,/ænd/,I like apples and oranges.,私はりんごとももが好きです。
+5級,but,しかし,接続詞,接続詞,/bʌt/,It is small but beautiful.,それは小さいけれど美しいです。
+5級,or,または,接続詞,接続詞,/ɔːr/,Do you like tea or coffee?,紅茶とコーヒー、どちらが好きですか？
+5級,because,なぜなら,接続詞,接続詞,/bɪˈkɔːz/,I like summer because it is sunny.,晴れるから私は夏が好きです。
+5級,so,だから（それで）,接続詞,接続詞,/soʊ/,"It was cold, so I closed the window.",寒かったので、窓を閉めました。

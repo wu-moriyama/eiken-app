@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply min-h-screen bg-white text-slate-900 antialiased;
+}
+
+/* ベースレイアウト用（カードなどは Tailwind クラスで調整） */
