@@ -26,7 +26,12 @@
     "seed:vocabulary": "node scripts/import-vocabulary.js",
     "seed:vocabulary:sql": "node scripts/import-vocabulary.js --sql",
     "seed:vocabulary:4kyu": "node scripts/import-vocabulary.js 4kyu",
-    "seed:vocabulary:4kyu:sql": "node scripts/import-vocabulary.js --sql 4kyu"
+    "seed:vocabulary:4kyu:sql": "node scripts/import-vocabulary.js --sql 4kyu",
+    "generate:vocabulary": "node scripts/generate-vocabulary.js",
+    "generate:vocabulary:jun2kyu": "node scripts/generate-vocabulary.js jun2kyu 300",
+    "generate:vocabulary:2kyu": "node scripts/generate-vocabulary.js 2kyu 300",
+    "generate:vocabulary:jun1kyu": "node scripts/generate-vocabulary.js jun1kyu 300",
+    "generate:vocabulary:1kyu": "node scripts/generate-vocabulary.js 1kyu 300"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

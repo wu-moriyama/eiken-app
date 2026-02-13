@@ -24,8 +24,9 @@ if (fs.existsSync(envPath)) {
 
 const { createClient } = require("@supabase/supabase-js");
 
-// 例: npm run seed:vocabulary:sql -- 3kyu  または  node import-vocabulary.js --sql 3kyu
-const levelArg = process.argv.find((a) => ["3kyu", "4kyu", "5kyu"].includes(a)) || "5kyu";
+// 例: npm run seed:vocabulary:sql -- 3kyu  または  node import-vocabulary.js --sql jun2kyu
+const SUPPORTED_LEVELS = ["3kyu", "4kyu", "5kyu", "jun2kyu", "2kyu", "jun1kyu", "1kyu"];
+const levelArg = process.argv.find((a) => SUPPORTED_LEVELS.includes(a)) || "5kyu";
 const csvPath = path.join(__dirname, "..", "data", `eiken_${levelArg}.csv`);
 
 function parseCSVLine(line) {
@@ -55,7 +56,7 @@ function escapeSql(str) {
 
 function loadRows() {
   if (!fs.existsSync(csvPath)) {
-    throw new Error(`CSV not found: ${csvPath} (use 4kyu or 5kyu as argument)`);
+    throw new Error(`CSV not found: ${csvPath} (use 3kyu, 4kyu, 5kyu, jun2kyu, 2kyu, jun1kyu, 1kyu)`);
   }
   const content = fs.readFileSync(csvPath, "utf-8");
   const lines = content.split(/\r?\n/).filter((l) => l.trim());
