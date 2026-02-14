@@ -24,6 +24,18 @@ const LEVEL_OPTIONS: LevelOption[] = [
 ];
 
 import { PRESET_AVATARS } from "@/lib/constants/avatars";
+import {
+  getRecentExamRoundOptions,
+  getDatesByRound,
+  type ExamRoundOption
+} from "@/lib/data/eiken-exam-db";
+import {
+  checkAndEarnProfileBadges,
+  getBadgeDef,
+  markBadgePopupShown,
+  type UserBadge
+} from "@/lib/data/badges";
+import { BadgePopup } from "@/components/features/badges/BadgePopup";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -36,12 +48,20 @@ export default function ProfilePage() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [avatarStyle, setAvatarStyle] = useState<string | null>(null);
   const [avatarTab, setAvatarTab] = useState<"preset" | "upload">("preset");
+  const [targetExam, setTargetExam] = useState<string>("");
+  const [examOptions, setExamOptions] = useState<ExamRoundOption[]>([]);
+  const [primaryDate, setPrimaryDate] = useState<string>("");
+  const [secondaryDate, setSecondaryDate] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [requiresLogin, setRequiresLogin] = useState(false);
+  const [badgePopup, setBadgePopup] = useState<UserBadge | null>(null);
+  const [badgePopupProfileId, setBadgePopupProfileId] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const load = async () => {
@@ -66,11 +86,17 @@ export default function ProfilePage() {
           user.identities.some((id: any) => id.provider === "google"));
       setCanEditEmail(!isGoogle);
 
-      const { data, error: profileError } = await supabase
-        .from("user_profiles")
-        .select("id, display_name, target_level, avatar_url, avatar_style")
-        .eq("auth_user_id", user.id)
-        .maybeSingle();
+      const [profileRes, examOptionsRes] = await Promise.all([
+        supabase
+          .from("user_profiles")
+          .select(
+            "id, display_name, target_level, avatar_url, avatar_style, target_exam_year, target_exam_round, target_exam_primary_date, target_exam_secondary_date"
+          )
+          .eq("auth_user_id", user.id)
+          .maybeSingle(),
+        getRecentExamRoundOptions(3)
+      ]);
+      const { data, error: profileError } = profileRes;
 
       if (profileError) {
         // RLS などで失敗しても、とりあえず表示名だけ編集できるようにする
@@ -86,6 +112,40 @@ export default function ProfilePage() {
         }
         if (data.avatar_url) setAvatarUrl(data.avatar_url);
         if (data.avatar_style) setAvatarStyle(data.avatar_style);
+        if (data.target_exam_year != null && data.target_exam_round != null) {
+          setTargetExam(`${data.target_exam_year}-${data.target_exam_round}`);
+        }
+        if (data.target_exam_primary_date) {
+          setPrimaryDate(data.target_exam_primary_date);
+        }
+        if (data.target_exam_secondary_date) {
+          setSecondaryDate(data.target_exam_secondary_date);
+        }
+      }
+      const opts = examOptionsRes;
+      setExamOptions(opts);
+      // 年度・回はあるが日程が未設定の場合、DBから取得してセット
+      if (data) {
+        const y = data.target_exam_year;
+        const r = data.target_exam_round;
+        if (
+          y != null &&
+          r != null &&
+          !data.target_exam_primary_date &&
+          !data.target_exam_secondary_date
+        ) {
+          const match = opts.find((o) => o.examYear === y && o.round === r);
+          if (match) {
+            setPrimaryDate(match.primaryDate);
+            setSecondaryDate(match.secondaryDate);
+          } else {
+            const dates = await getDatesByRound(y, r);
+            if (dates) {
+              setPrimaryDate(dates.primaryDate);
+              setSecondaryDate(dates.secondaryDate);
+            }
+          }
+        }
       }
 
       setIsLoading(false);
@@ -119,6 +179,18 @@ export default function ProfilePage() {
         if (emailError) throw emailError;
       }
 
+      const targetParts = targetExam ? targetExam.split("-") : null;
+      const targetExamYear =
+        targetParts?.length === 2 ? parseInt(targetParts[0], 10) : null;
+      const targetExamRound =
+        targetParts?.length === 2 ? parseInt(targetParts[1], 10) : null;
+      const targetPrimary =
+        primaryDate && targetExam ? primaryDate : null;
+      const targetSecondary =
+        secondaryDate && targetExam ? secondaryDate : null;
+
+      let effectiveProfileId = profileId;
+
       if (profileId) {
         const { error: updateError } = await supabase
           .from("user_profiles")
@@ -126,29 +198,61 @@ export default function ProfilePage() {
             display_name: displayName || null,
             target_level: targetLevel,
             avatar_url: avatarUrl,
-            avatar_style: avatarStyle
+            avatar_style: avatarStyle,
+            target_exam_year: targetExamYear,
+            target_exam_round: targetExamRound,
+            target_exam_primary_date: targetPrimary,
+            target_exam_secondary_date: targetSecondary
           })
           .eq("id", profileId);
 
         if (updateError) throw updateError;
       } else {
-        const { data, error: insertError } = await supabase
+        const { data: insertData, error: insertError } = await supabase
           .from("user_profiles")
           .insert({
             auth_user_id: user.id,
             display_name: displayName || null,
             target_level: targetLevel,
             avatar_url: avatarUrl,
-            avatar_style: avatarStyle
+            avatar_style: avatarStyle,
+            target_exam_year: targetExamYear,
+            target_exam_round: targetExamRound,
+            target_exam_primary_date: targetPrimary,
+            target_exam_secondary_date: targetSecondary
           })
           .select("id")
           .maybeSingle();
 
         if (insertError) throw insertError;
-        if (data?.id) setProfileId(data.id);
+        if (insertData?.id) {
+          setProfileId(insertData.id);
+          effectiveProfileId = insertData.id;
+        }
       }
 
       setMessage("プロフィールを保存しました。");
+
+      if (effectiveProfileId) {
+        const newlyEarned = await checkAndEarnProfileBadges(effectiveProfileId, {
+          targetLevel: targetLevel || null,
+          targetExamYear: targetExamYear ?? null,
+          targetExamRound: targetExamRound ?? null,
+          targetExamPrimaryDate: targetPrimary
+        });
+        if (newlyEarned.length > 0) {
+          const first = getBadgeDef(newlyEarned[0]);
+          if (first) {
+            setBadgePopupProfileId(effectiveProfileId);
+            setBadgePopup({
+              badgeKey: newlyEarned[0],
+              earnedAt: new Date().toISOString(),
+              popupShown: false,
+              def: first
+            });
+          }
+        }
+      }
     } catch (err: any) {
       setError(err?.message ?? "プロフィールの保存に失敗しました。");
     } finally {
@@ -201,7 +305,7 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 bg-slate-50">
+      <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4">
         <p className="text-sm text-slate-600">読み込み中です...</p>
       </main>
     );
@@ -209,7 +313,7 @@ export default function ProfilePage() {
 
   if (requiresLogin) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-sm space-y-4">
           <h1 className="text-lg font-semibold text-slate-900">
             ログインが必要です
@@ -230,14 +334,14 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+    <main className="min-h-[calc(100vh-64px)] px-4 py-8">
       <div className="mx-auto max-w-md space-y-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
             プロフィール設定
           </h1>
           <p className="text-sm text-slate-600">
-            ダッシュボードの表示名・メールアドレス・目標レベル・アバターを設定できます。
+            ダッシュボードの表示名・メールアドレス・目標レベル・目標の受験日・アバターを設定できます。
           </p>
         </div>
 
@@ -394,6 +498,71 @@ export default function ProfilePage() {
             </select>
           </div>
 
+          <div className="space-y-2">
+            <label className="block text-xs font-medium text-slate-800">
+              目標の受験日
+            </label>
+            <select
+              value={targetExam}
+              onChange={(e) => {
+                const val = e.target.value;
+                setTargetExam(val);
+                if (val) {
+                  const opt = examOptions.find((o) => o.value === val);
+                  if (opt) {
+                    setPrimaryDate(opt.primaryDate);
+                    setSecondaryDate(opt.secondaryDate);
+                  }
+                } else {
+                  setPrimaryDate("");
+                  setSecondaryDate("");
+                }
+              }}
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+            >
+              <option value="">選択してください</option>
+              {examOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            {targetExam && (
+              <div className="mt-3 space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-[11px] font-medium text-slate-600">
+                  受験日程（必要に応じて修正できます）
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-[11px] text-slate-500">
+                      一次試験日
+                    </label>
+                    <input
+                      type="date"
+                      value={primaryDate}
+                      onChange={(e) => setPrimaryDate(e.target.value)}
+                      className="mt-0.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-slate-500">
+                      二次試験日
+                    </label>
+                    <input
+                      type="date"
+                      value={secondaryDate}
+                      onChange={(e) => setSecondaryDate(e.target.value)}
+                      className="mt-0.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+            <p className="text-[11px] text-slate-500">
+              直近3回から選択。DBの日程が自動でセットされます。カウントダウンは一次試験日を使用します。
+            </p>
+          </div>
+
           {error && (
             <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2">
               {error}
@@ -415,6 +584,19 @@ export default function ProfilePage() {
           </button>
         </form>
       </div>
+
+      {badgePopup && (
+        <BadgePopup
+          badge={badgePopup}
+          onClose={async () => {
+            if (badgePopupProfileId) {
+              await markBadgePopupShown(badgePopupProfileId, badgePopup.badgeKey);
+            }
+            setBadgePopup(null);
+            setBadgePopupProfileId(null);
+          }}
+        />
+      )}
     </main>
   );
 }

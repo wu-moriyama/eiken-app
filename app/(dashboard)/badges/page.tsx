@@ -2,20 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { getProfileId } from "@/lib/data/vocabulary-db";
 import {
   getUserBadges,
   BADGE_DEFINITIONS,
+  BADGE_TIER_IMAGES,
   type UserBadge
 } from "@/lib/data/badges";
-
-const TIER_STYLES = {
-  bronze: "from-amber-700 to-amber-900 border-amber-600/50",
-  silver: "from-slate-400 to-slate-600 border-slate-300/50",
-  gold: "from-amber-400 to-amber-600 border-amber-300/50"
-};
-
-const TIER_LABELS = { bronze: "銅", silver: "銀", gold: "金" };
 
 export default function BadgesPage() {
   const [userBadges, setUserBadges] = useState<UserBadge[]>([]);
@@ -44,7 +38,7 @@ export default function BadgesPage() {
 
   if (loading) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-2xl text-center text-slate-600">
           読み込み中...
         </div>
@@ -54,7 +48,7 @@ export default function BadgesPage() {
 
   if (requiresLogin) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h1 className="text-xl font-semibold text-slate-900">バッヂ</h1>
           <p className="mt-4 text-sm text-slate-600">
@@ -75,7 +69,7 @@ export default function BadgesPage() {
   const totalCount = BADGE_DEFINITIONS.length;
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+    <main className="min-h-[calc(100vh-64px)] px-4 py-8">
       <div className="mx-auto max-w-3xl">
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -96,8 +90,7 @@ export default function BadgesPage() {
           {BADGE_DEFINITIONS.map((def) => {
             const earned = earnedKeys.has(def.key);
             const earnedAt = earnedAtMap.get(def.key);
-            const tierStyle = TIER_STYLES[def.tier] ?? TIER_STYLES.bronze;
-            const tierLabel = TIER_LABELS[def.tier] ?? "";
+            const medalSrc = BADGE_TIER_IMAGES[def.tier] ?? BADGE_TIER_IMAGES.bronze;
 
             return (
               <div
@@ -110,13 +103,17 @@ export default function BadgesPage() {
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${tierStyle} border-2 ${
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center ${
                       earned ? "opacity-100" : "opacity-30"
                     }`}
                   >
-                    <span className="text-sm font-bold text-white">
-                      {tierLabel}
-                    </span>
+                    <Image
+                      src={medalSrc}
+                      alt={def.tier}
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
                   </div>
                   <div className="min-w-0 flex-1">
                     <h3

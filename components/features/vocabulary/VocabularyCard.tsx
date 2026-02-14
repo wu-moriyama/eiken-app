@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { MODULE_COLORS } from "@/lib/constants/module-colors";
 import { motion, AnimatePresence } from "framer-motion";
 import type { VocabularyItem } from "@/lib/data/sample-vocabulary";
 
@@ -114,7 +115,7 @@ export function VocabularyCard({ item, onRate }: VocabularyCardProps) {
             <button
               type="button"
               onClick={() => onRate(true)}
-              className="rounded-full bg-emerald-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-600"
+              className={`rounded-full px-6 py-2.5 text-sm font-semibold text-white shadow-sm ${MODULE_COLORS.vocabulary.solid} ${MODULE_COLORS.vocabulary.solidHover}`}
             >
               覚えた
             </button>

@@ -1,19 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import type { UserBadge } from "@/lib/data/badges";
-
-const TIER_STYLES = {
-  bronze: "from-amber-700 to-amber-900 border-amber-600/50",
-  silver: "from-slate-400 to-slate-600 border-slate-300/50",
-  gold: "from-amber-400 to-amber-600 border-amber-300/50"
-};
-
-const TIER_LABELS = {
-  bronze: "銅",
-  silver: "銀",
-  gold: "金"
-};
+import { BADGE_TIER_IMAGES } from "@/lib/data/badges";
 
 interface BadgePopupProps {
   badge: UserBadge;
@@ -24,8 +14,7 @@ export function BadgePopup({ badge, onClose }: BadgePopupProps) {
   const def = badge.def;
   if (!def) return null;
 
-  const tierStyle = TIER_STYLES[def.tier] ?? TIER_STYLES.bronze;
-  const tierLabel = TIER_LABELS[def.tier] ?? "";
+  const medalSrc = BADGE_TIER_IMAGES[def.tier] ?? BADGE_TIER_IMAGES.bronze;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -34,10 +23,14 @@ export function BadgePopup({ badge, onClose }: BadgePopupProps) {
           <p className="mb-3 text-sm font-semibold text-emerald-600">
             バッヂ獲得！
           </p>
-          <div
-            className={`mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br ${tierStyle} border-2 shadow-lg`}
-          >
-            <span className="text-2xl font-bold text-white">{tierLabel}</span>
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center">
+            <Image
+              src={medalSrc}
+              alt={def.tier}
+              width={80}
+              height={80}
+              className="object-contain"
+            />
           </div>
           <h3 className="text-lg font-semibold text-slate-900">{def.title}</h3>
           <p className="mt-1 text-sm text-slate-600">{def.description}</p>

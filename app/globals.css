@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Noto Sans JP をメインフォントに（Google Fonts CDN） */
+html,
+body {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+}
+
 body {
   @apply min-h-screen bg-white text-slate-900 antialiased;
 }

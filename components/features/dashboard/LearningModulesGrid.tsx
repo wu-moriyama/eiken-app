@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MODULE_COLORS, type ModuleKey } from "@/lib/constants/module-colors";
 
 const MODULES = [
   {
@@ -58,33 +59,38 @@ export function LearningModulesGrid({ targetLevel }: LearningModulesGridProps) {
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-3">
-        {modules.map((m) => (
-          <article
-            key={m.key}
-            className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-sm"
-          >
-            <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 rounded-full bg-slate-50 px-2.5 py-[3px] text-[10px] font-medium text-slate-600 border border-slate-200">
-                <span>{m.badge}</span>
+        {modules.map((m) => {
+          const colors = MODULE_COLORS[m.key as ModuleKey];
+          return (
+            <article
+              key={m.key}
+              className={`flex flex-col justify-between rounded-2xl border-l-4 ${colors.borderLeft} border border-slate-200 bg-white p-4 text-sm shadow-sm`}
+            >
+              <div className="space-y-2">
+                <div
+                  className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-[3px] text-[10px] font-medium ${colors.badge}`}
+                >
+                  <span>{m.badge}</span>
+                </div>
+                <h3 className="text-sm font-semibold text-slate-900">
+                  {m.title}
+                </h3>
+                <p className="text-xs text-slate-600">{m.description}</p>
               </div>
-              <h3 className="text-sm font-semibold text-slate-900">
-                {m.title}
-              </h3>
-              <p className="text-xs text-slate-600">{m.description}</p>
-            </div>
-            <div className="mt-3">
-              <Link
-                href={m.href}
-                className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-500"
-              >
-                開く
-                <span aria-hidden="true" className="ml-1">
-                  →
-                </span>
-              </Link>
-            </div>
-          </article>
-        ))}
+              <div className="mt-3">
+                <Link
+                  href={m.href}
+                  className={`inline-flex items-center text-xs font-semibold ${colors.text} ${colors.textHover}`}
+                >
+                  開く
+                  <span aria-hidden="true" className="ml-1">
+                    →
+                  </span>
+                </Link>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

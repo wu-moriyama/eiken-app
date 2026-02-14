@@ -164,7 +164,7 @@ export default function WritingHistoryPage() {
 
   if (loading) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-2xl text-center text-slate-600">
           読み込み中...
         </div>
@@ -174,7 +174,7 @@ export default function WritingHistoryPage() {
 
   if (requiresLogin) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h1 className="text-xl font-semibold text-slate-900">ライティング履歴</h1>
           <p className="mt-4 text-sm text-slate-600">
@@ -192,7 +192,7 @@ export default function WritingHistoryPage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+    <main className="min-h-[calc(100vh-64px)] px-4 py-8">
       <div className="mx-auto max-w-2xl">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-xl font-semibold text-slate-900">ライティング履歴</h1>

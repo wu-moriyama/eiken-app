@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getProfileTargetLevel, profileLevelToVocabularyLevel } from "@/lib/data/vocabulary-db";
+import { MODULE_COLORS } from "@/lib/constants/module-colors";
 
 const WRITING_LEVELS = ["3級", "準2級", "2級", "準1級", "1級"] as const;
 type WritingLevel = (typeof WRITING_LEVELS)[number];
@@ -37,16 +38,19 @@ export default function WritingPage() {
   const info = LEVEL_INFO[selectedLevel];
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+    <main className="min-h-[calc(100vh-64px)] px-4 py-8">
       <div className="mx-auto max-w-xl">
         <div className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-semibold text-slate-900">
+            <h1 className="flex items-center gap-2 text-xl font-semibold text-slate-900">
+              <span
+                className={`h-2 w-2 rounded-full ${MODULE_COLORS.writing.dot}`}
+              />
               ライティング
             </h1>
             <Link
               href="/writing/history"
-              className="text-sm text-blue-600 hover:text-blue-500 hover:underline"
+              className={`text-sm font-medium ${MODULE_COLORS.writing.text} ${MODULE_COLORS.writing.textHover} hover:underline`}
             >
               履歴を見る
             </Link>
@@ -76,7 +80,7 @@ export default function WritingPage() {
             <p className="text-xs font-medium text-slate-500">英作文</p>
             <Link
               href={`/writing/essay?level=${selectedLevel}`}
-              className="flex flex-col gap-2 rounded-xl border border-slate-200 p-5 transition-colors hover:border-blue-300 hover:bg-blue-50/50"
+              className={`flex flex-col gap-2 rounded-xl border border-slate-200 p-5 transition-colors ${MODULE_COLORS.writing.bgHover}`}
             >
               <span className="text-sm font-medium text-slate-900">
                 英作文（{selectedLevel}）
@@ -91,7 +95,7 @@ export default function WritingPage() {
                 <p className="pt-2 text-xs font-medium text-slate-500">Eメール</p>
                 <Link
                   href={`/writing/email?level=${selectedLevel}`}
-                  className="flex flex-col gap-2 rounded-xl border border-slate-200 p-5 transition-colors hover:border-blue-300 hover:bg-blue-50/50"
+                  className={`flex flex-col gap-2 rounded-xl border border-slate-200 p-5 transition-colors ${MODULE_COLORS.writing.bgHover}`}
                 >
                   <span className="text-sm font-medium text-slate-900">
                     Eメール（{selectedLevel}）
@@ -108,7 +112,7 @@ export default function WritingPage() {
             <p className="pt-4 text-xs font-medium text-slate-500">履歴</p>
             <Link
               href="/writing/history"
-              className="flex flex-col gap-2 rounded-xl border-2 border-blue-200 bg-blue-50/50 p-5 transition-colors hover:border-blue-300 hover:bg-blue-50"
+              className={`flex flex-col gap-2 rounded-xl border-2 p-5 transition-colors ${MODULE_COLORS.writing.border} ${MODULE_COLORS.writing.bg} hover:bg-[#A6D472]/20`}
             >
               <span className="text-sm font-medium text-slate-900">
                 過去のフィードバック・履歴を見る
@@ -122,7 +126,7 @@ export default function WritingPage() {
           <div className="flex justify-center gap-4 pt-2">
             <Link
               href="/writing/history"
-              className="text-sm text-blue-600 hover:text-blue-500 hover:underline"
+              className={`text-sm font-medium ${MODULE_COLORS.writing.text} ${MODULE_COLORS.writing.textHover} hover:underline`}
             >
               履歴を見る
             </Link>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MODULE_COLORS } from "@/lib/constants/module-colors";
 import { CorrectedTextWithHighlights } from "./CorrectedTextWithHighlights";
 import { ReadAloudButton } from "./ReadAloudButton";
 import { getProfileId } from "@/lib/data/vocabulary-db";
@@ -148,7 +149,7 @@ export function WritingResult({ data, level, promptType, onNewProblem }: Writing
       <h2 className="text-lg font-semibold text-slate-900">添削結果</h2>
 
       <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4">
-        <span className="text-3xl font-bold text-blue-600">
+        <span className={`text-3xl font-bold ${MODULE_COLORS.writing.text}`}>
           {data.overall_score.toFixed(1)}
         </span>
         <span className="text-slate-600">総合</span>
@@ -210,7 +211,7 @@ export function WritingResult({ data, level, promptType, onNewProblem }: Writing
 
       <div>
         <h3 className="mb-2 text-sm font-medium text-slate-700">フィードバック</h3>
-        <div className="rounded-lg border border-blue-100 bg-blue-50/50 p-4">
+        <div className="rounded-lg border border-[#A6D472]/40 bg-[#A6D472]/15 p-4">
           <p className="whitespace-pre-wrap text-sm text-slate-800">
             {data.feedback}
           </p>
@@ -220,7 +221,7 @@ export function WritingResult({ data, level, promptType, onNewProblem }: Writing
       <div className="flex flex-wrap gap-3 pt-2">
         <Link
           href="/writing"
-          className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-blue-500"
+          className={`flex-1 rounded-full px-4 py-2.5 text-center text-sm font-semibold text-white ${MODULE_COLORS.writing.solid} ${MODULE_COLORS.writing.solidHover}`}
         >
           形式選択に戻る
         </Link>

@@ -9,7 +9,23 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: [
+          '"Noto Sans JP"',
+          "Hiragino Kaku Gothic ProN",
+          "Meiryo",
+          "sans-serif"
+        ]
+      },
       colors: {
+        /** カラーチャート準拠のモジュール色 */
+        module: {
+          vocabulary: "#F99F66", // オレンジ
+          writing: "#A6D472", // グリーン
+          reading: "#31B5D1", // ブルー
+          listening: "#A77CBF", // パープル
+          speaking: "#F57A9C" // ピンク
+        },
         brand: {
           50: "#eff6ff",
           100: "#dbeafe",

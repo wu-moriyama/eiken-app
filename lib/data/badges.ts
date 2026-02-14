@@ -2,6 +2,13 @@ import { supabase } from "@/lib/supabase/client";
 
 export type BadgeTier = "bronze" | "silver" | "gold";
 
+/** 各ティアに対応するメダル画像パス */
+export const BADGE_TIER_IMAGES: Record<BadgeTier, string> = {
+  bronze: "/badges/bronze.png",
+  silver: "/badges/silver.png",
+  gold: "/badges/gold.png"
+};
+
 export interface BadgeDef {
   key: string;
   title: string;
@@ -26,7 +33,9 @@ export const BADGE_DEFINITIONS: BadgeDef[] = [
   { key: "study_first_day", title: "初めての学習", description: "1日達成！初めて学習を記録しました", tier: "bronze" },
   { key: "streak_3", title: "3日間連続学習", description: "3日連続で学習を続けました", tier: "bronze" },
   { key: "streak_7", title: "1週間連続学習", description: "7日連続で学習を続けました", tier: "bronze" },
-  { key: "streak_14", title: "2週間連続学習", description: "14日連続で学習を続けました", tier: "silver" }
+  { key: "streak_14", title: "2週間連続学習", description: "14日連続で学習を続けました", tier: "silver" },
+  { key: "profile_target_level", title: "目標レベル設定", description: "プロフィールで目標レベルを設定しました", tier: "silver" },
+  { key: "profile_target_exam", title: "目標受験日設定", description: "プロフィールで目標受験日を設定しました", tier: "silver" }
 ];
 
 const BADGE_MAP = new Map(BADGE_DEFINITIONS.map((b) => [b.key, b]));
@@ -171,6 +180,37 @@ export async function checkAndEarnBadges(
   await maybeEarn("streak_3", stats.currentStreak >= 3);
   await maybeEarn("streak_7", stats.currentStreak >= 7);
   await maybeEarn("streak_14", stats.currentStreak >= 14);
+
+  return earned;
+}
+
+/** プロフィール設定に基づくバッヂをチェック・付与 */
+export async function checkAndEarnProfileBadges(
+  profileId: string,
+  profile: {
+    targetLevel: string | null;
+    targetExamYear: number | null;
+    targetExamRound: number | null;
+    targetExamPrimaryDate: string | null;
+  }
+): Promise<string[]> {
+  const earned: string[] = [];
+
+  const maybeEarn = async (key: string, condition: boolean) => {
+    if (!condition) return;
+    const already = await hasBadge(profileId, key);
+    if (!already && (await earnBadge(profileId, key))) {
+      earned.push(key);
+    }
+  };
+
+  await maybeEarn("profile_target_level", !!profile.targetLevel);
+  await maybeEarn(
+    "profile_target_exam",
+    profile.targetExamYear != null &&
+      profile.targetExamRound != null &&
+      !!profile.targetExamPrimaryDate
+  );
 
   return earned;
 }

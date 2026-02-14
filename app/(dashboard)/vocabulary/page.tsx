@@ -22,6 +22,7 @@ import {
   GUEST_VOCABULARY_LIMIT,
 } from "@/lib/guest-usage";
 import { GuestLimitPrompt } from "@/components/GuestLimitPrompt";
+import { MODULE_COLORS } from "@/lib/constants/module-colors";
 
 export default function VocabularyPage() {
   const [stage, setStage] = useState<"select" | "session" | "result">("select");
@@ -137,7 +138,7 @@ export default function VocabularyPage() {
 
   if (showGuestLimit) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-xl">
           <GuestLimitPrompt type="vocabulary" />
         </div>
@@ -146,11 +147,14 @@ export default function VocabularyPage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+    <main className="min-h-[calc(100vh-64px)] px-4 py-8">
       <div className="mx-auto max-w-xl">
         {stage === "select" && (
           <div className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h1 className="text-xl font-semibold text-slate-900">
+            <h1 className="flex items-center gap-2 text-xl font-semibold text-slate-900">
+              <span
+                className={`h-2 w-2 rounded-full ${MODULE_COLORS.vocabulary.dot}`}
+              />
               単語クイズ
             </h1>
             <p className="text-sm text-slate-600">
@@ -188,14 +192,14 @@ export default function VocabularyPage() {
               type="button"
               onClick={startSession}
               disabled={loading || !selectedLevel}
-              className="w-full rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`w-full rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-sm disabled:opacity-50 disabled:cursor-not-allowed ${MODULE_COLORS.vocabulary.solid} ${MODULE_COLORS.vocabulary.solidHover}`}
             >
               {loading ? "読み込み中..." : "学習を開始"}
             </button>
             <div className="flex justify-center gap-4 text-sm">
               <Link
                 href="/vocabulary/history"
-                className="text-slate-600 hover:text-slate-900"
+                className={`${MODULE_COLORS.vocabulary.text} ${MODULE_COLORS.vocabulary.textHover}`}
               >
                 過去の履歴を見る
               </Link>
@@ -242,7 +246,7 @@ export default function VocabularyPage() {
               <button
                 type="button"
                 onClick={startSession}
-                className="w-full rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+                className={`w-full rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-sm ${MODULE_COLORS.vocabulary.solid} ${MODULE_COLORS.vocabulary.solidHover}`}
               >
                 もう一度
               </button>

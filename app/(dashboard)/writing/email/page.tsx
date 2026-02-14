@@ -20,6 +20,7 @@ import { getGuestWritingCount, incrementGuestWritingCount, GUEST_WRITING_LIMIT }
 import { GuestLimitPrompt } from "@/components/GuestLimitPrompt";
 import { WritingHintPanel, WritingHintButton } from "@/components/features/writing/WritingHintPanel";
 import { logStudyActivity } from "@/lib/data/study-activity";
+import { MODULE_COLORS } from "@/lib/constants/module-colors";
 import { WritingResult, type WritingResultData } from "@/components/features/writing/WritingResult";
 
 const VALID_EMAIL_LEVELS = ["3級", "準2級"] as const;
@@ -243,7 +244,7 @@ function WritingEmailContent() {
 
   if (!levelLoaded || loading) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <p className="text-center text-slate-600">読み込み中...</p>
         </div>
@@ -253,7 +254,7 @@ function WritingEmailContent() {
 
   if (result) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <WritingResult
@@ -270,7 +271,7 @@ function WritingEmailContent() {
 
   if (error || !prompt || !promptData) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <p className="text-red-600">
@@ -290,7 +291,7 @@ function WritingEmailContent() {
 
   if (showGuestLimit) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <main className="min-h-[calc(100vh-64px)] px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <GuestLimitPrompt type="writing" />
         </div>
@@ -299,7 +300,7 @@ function WritingEmailContent() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+    <main className="min-h-[calc(100vh-64px)] px-4 py-8">
       <WritingHintPanel
         type="email"
         level={level}
@@ -323,7 +324,8 @@ function WritingEmailContent() {
 
         <div className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h1 className="text-xl font-semibold text-slate-900">
+            <h1 className="flex items-center gap-2 text-xl font-semibold text-slate-900">
+              <span className={`h-2 w-2 rounded-full ${MODULE_COLORS.writing.dot}`} />
               英検 ライティング（Eメール）問題
             </h1>
             <div className="flex items-center gap-2">
@@ -407,7 +409,7 @@ function WritingEmailContent() {
             <button
               type="button"
               onClick={startWriting}
-              className="w-full rounded-full bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+              className={`w-full rounded-full px-4 py-3 text-sm font-semibold text-white shadow-sm ${MODULE_COLORS.writing.solid} ${MODULE_COLORS.writing.solidHover}`}
             >
               書き始める
             </button>
@@ -419,7 +421,7 @@ function WritingEmailContent() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-sm disabled:opacity-60 disabled:cursor-not-allowed ${MODULE_COLORS.writing.solid} ${MODULE_COLORS.writing.solidHover}`}
                 >
                   {submitting ? "添削中..." : "提出する（AI添削）"}
                 </button>
@@ -442,7 +444,7 @@ export default function WritingEmailPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+        <main className="min-h-[calc(100vh-64px)] px-4 py-8">
           <div className="mx-auto max-w-2xl">
             <p className="text-center text-slate-600">読み込み中...</p>
           </div>

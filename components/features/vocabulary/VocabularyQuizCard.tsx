@@ -6,6 +6,7 @@ import type { VocabularyItem } from "@/lib/data/sample-vocabulary";
 import type { QuizOption } from "@/lib/data/sample-vocabulary";
 import { ReadAloudButton } from "@/components/features/writing/ReadAloudButton";
 import { getProfileId } from "@/lib/data/vocabulary-db";
+import { MODULE_COLORS } from "@/lib/constants/module-colors";
 import { logReadingAloudActivity } from "@/lib/data/study-activity";
 
 interface VocabularyQuizCardProps {
@@ -49,7 +50,7 @@ export function VocabularyQuizCard({
     }
     const opt = options[index];
     if (opt.isCorrect) {
-      return "border-emerald-500 bg-emerald-50 text-emerald-900";
+      return "border-[#F99F66] bg-[#F99F66]/15 text-[#B36A3D]";
     }
     if (selectedIndex === index) {
       return "border-red-400 bg-red-50 text-red-900";
@@ -61,7 +62,9 @@ export function VocabularyQuizCard({
     <div className="w-full max-w-md mx-auto space-y-6">
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
-          <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700">
+          <span
+            className={`rounded-full border px-3 py-1 text-xs font-medium ${MODULE_COLORS.vocabulary.badge}`}
+          >
             英検 {item.level}
           </span>
           <button
@@ -144,7 +147,7 @@ export function VocabularyQuizCard({
             <button
               type="button"
               onClick={onNext}
-              className="w-full rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+              className={`w-full rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-sm ${MODULE_COLORS.vocabulary.solid} ${MODULE_COLORS.vocabulary.solidHover}`}
             >
               次へ
             </button>

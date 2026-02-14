@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MODULE_COLORS, type ModuleKey } from "@/lib/constants/module-colors";
 
 const VOCABULARY_TASK = {
   key: "vocabulary",
@@ -103,6 +104,7 @@ export function TodayPlanCard({
         {recommendedTasks.map((t) => (
           <TodayTask
             key={t.key}
+            moduleKey={t.key}
             title={t.title}
             detail={t.detail}
             duration={t.duration}
@@ -115,19 +117,31 @@ export function TodayPlanCard({
 }
 
 interface TodayTaskProps {
+  moduleKey: string;
   title: string;
   detail: string;
   duration: string;
   href: string;
 }
 
-function TodayTask({ title, detail, duration, href }: TodayTaskProps) {
+function TodayTask({
+  moduleKey,
+  title,
+  detail,
+  duration,
+  href
+}: TodayTaskProps) {
+  const colors = MODULE_COLORS[moduleKey as ModuleKey] ?? MODULE_COLORS.vocabulary;
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+    <div
+      className={`flex flex-col justify-between rounded-2xl border-l-4 ${colors.borderLeft} border border-slate-200 ${colors.bg} p-4`}
+    >
       <div className="space-y-1">
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
-          <span className="shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700 border border-emerald-100">
+          <span
+            className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-medium ${colors.badge}`}
+          >
             {duration}
           </span>
         </div>
@@ -136,7 +150,7 @@ function TodayTask({ title, detail, duration, href }: TodayTaskProps) {
       <div className="mt-3">
         <Link
           href={href}
-          className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-500"
+          className={`inline-flex items-center text-xs font-semibold ${colors.text} ${colors.textHover}`}
         >
           始める
           <span aria-hidden="true" className="ml-1">

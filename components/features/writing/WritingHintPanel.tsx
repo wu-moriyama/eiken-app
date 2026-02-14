@@ -96,7 +96,7 @@ export function WritingHintButton({ onClick, isOpen }: WritingHintButtonProps) {
       onClick={onClick}
       className={`fixed bottom-6 right-6 z-30 flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium shadow-lg transition-all hover:shadow-xl ${
         isOpen
-          ? "bg-amber-500 text-white"
+          ? "bg-[#A6D472] text-white hover:bg-[#8FC55C]"
           : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
       }`}
       aria-label="ヒントを見る"

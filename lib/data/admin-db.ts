@@ -317,3 +317,119 @@ export async function adminDeleteWritingPrompt(id: number) {
 
   if (error) throw new Error(error.message);
 }
+
+// ========== 基本設定 ==========
+
+export interface AppSettings {
+  admin_email: string | null;
+}
+
+export async function adminGetAppSettings(): Promise<AppSettings> {
+  const { data, error } = await supabase
+    .from("app_settings")
+    .select("admin_email")
+    .eq("id", 1)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+  return {
+    admin_email: (data?.admin_email as string) ?? null
+  };
+}
+
+export async function adminUpdateAppSettings(updates: { admin_email?: string | null }) {
+  const { error } = await supabase
+    .from("app_settings")
+    .update({
+      admin_email: updates.admin_email ?? null,
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", 1);
+
+  if (error) throw new Error(error.message);
+}
+
+export interface ExamDateRow {
+  id: string;
+  exam_year: number;
+  round: number;
+  primary_date: string;
+  secondary_date: string;
+}
+
+export async function adminGetExamDates(): Promise<ExamDateRow[]> {
+  const { data, error } = await supabase
+    .from("eiken_exam_dates")
+    .select("id, exam_year, round, primary_date, secondary_date")
+    .order("exam_year", { ascending: true })
+    .order("round", { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((r) => ({
+    id: r.id as string,
+    exam_year: r.exam_year as number,
+    round: r.round as number,
+    primary_date: (r.primary_date as string) ?? "",
+    secondary_date: (r.secondary_date as string) ?? ""
+  }));
+}
+
+export async function adminUpsertExamDate(
+  examYear: number,
+  round: number,
+  primaryDate: string,
+  secondaryDate: string
+) {
+  const { error } = await supabase
+    .from("eiken_exam_dates")
+    .upsert(
+      {
+        exam_year: examYear,
+        round,
+        primary_date: primaryDate,
+        secondary_date: secondaryDate,
+        updated_at: new Date().toISOString()
+      },
+      { onConflict: "exam_year,round" }
+    );
+
+  if (error) throw new Error(error.message);
+}
+
+// ========== 月別背景設定 ==========
+
+export interface MonthlyBackgroundRow {
+  month: number;
+  image_url: string | null;
+}
+
+export async function adminGetMonthlyBackgrounds(): Promise<MonthlyBackgroundRow[]> {
+  const { data, error } = await supabase
+    .from("monthly_backgrounds")
+    .select("month, image_url")
+    .order("month", { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((r) => ({
+    month: r.month as number,
+    image_url: (r.image_url as string) ?? null
+  }));
+}
+
+export async function adminUpsertMonthlyBackground(
+  month: number,
+  imageUrl: string | null
+) {
+  const { error } = await supabase
+    .from("monthly_backgrounds")
+    .upsert(
+      {
+        month,
+        image_url: imageUrl,
+        updated_at: new Date().toISOString()
+      },
+      { onConflict: "month" }
+    );
+
+  if (error) throw new Error(error.message);
+}

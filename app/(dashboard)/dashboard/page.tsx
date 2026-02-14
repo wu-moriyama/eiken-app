@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -24,6 +24,10 @@ import {
   getTotalWritingCount
 } from "@/lib/data/writing-db";
 import {
+  getNearestPrimaryDate,
+  formatExamRoundLabel
+} from "@/lib/data/eiken-exam-db";
+import {
   checkAndEarnBadges,
   getUnshownBadge,
   markBadgePopupShown,
@@ -36,6 +40,10 @@ interface ProfileState {
   target_level: string | null;
   avatar_url: string | null;
   avatar_style: string | null;
+  target_exam_year: number | null;
+  target_exam_round: number | null;
+  target_exam_primary_date: string | null;
+  target_exam_secondary_date: string | null;
 }
 
 export default function DashboardPage() {
@@ -52,6 +60,10 @@ export default function DashboardPage() {
   >({});
   const [writingCount, setWritingCount] = useState<number | null>(null);
   const [badgePopup, setBadgePopup] = useState<UserBadge | null>(null);
+  const [examCountdown, setExamCountdown] = useState<{
+    label: string;
+    daysLeft: number;
+  } | null>(null);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -62,7 +74,9 @@ export default function DashboardPage() {
 
       const { data } = await supabase
         .from("user_profiles")
-        .select("display_name, target_level, avatar_url, avatar_style")
+        .select(
+          "display_name, target_level, avatar_url, avatar_style, target_exam_year, target_exam_round, target_exam_primary_date, target_exam_secondary_date"
+        )
         .eq("auth_user_id", user.id)
         .maybeSingle();
 
@@ -71,7 +85,11 @@ export default function DashboardPage() {
           display_name: data.display_name,
           target_level: data.target_level,
           avatar_url: data.avatar_url,
-          avatar_style: data.avatar_style
+          avatar_style: data.avatar_style,
+          target_exam_year: data.target_exam_year ?? null,
+          target_exam_round: data.target_exam_round ?? null,
+          target_exam_primary_date: data.target_exam_primary_date ?? null,
+          target_exam_secondary_date: data.target_exam_secondary_date ?? null
         });
       }
     };
@@ -147,6 +165,51 @@ export default function DashboardPage() {
     void loadStats();
   }, [profile?.target_level]);
 
+  useEffect(() => {
+    const loadCountdown = async () => {
+      // 設定していたらその日へのカウントダウン、未設定なら直近の英検一次へ
+      if (profile?.target_exam_primary_date) {
+        const target = new Date(profile.target_exam_primary_date);
+        target.setHours(0, 0, 0, 0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const diffMs = target.getTime() - today.getTime();
+        const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        const label =
+          profile.target_exam_year != null && profile.target_exam_round != null
+            ? formatExamRoundLabel(
+                profile.target_exam_year,
+                profile.target_exam_round
+              )
+            : "目標";
+        setExamCountdown({ label, daysLeft });
+        return;
+      }
+
+      // 未設定: 直近の英検一次日程へ
+      const nearest = await getNearestPrimaryDate();
+      if (!nearest) {
+        setExamCountdown(null);
+        return;
+      }
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const target = new Date(nearest.date);
+      target.setHours(0, 0, 0, 0);
+      const diffMs = target.getTime() - today.getTime();
+      const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+      setExamCountdown({
+        label: nearest.label,
+        daysLeft
+      });
+    };
+    void loadCountdown();
+  }, [
+    profile?.target_exam_primary_date,
+    profile?.target_exam_year,
+    profile?.target_exam_round
+  ]);
+
   // タブに戻ったとき・ページ復元時にも再取得（クイズ・ライティング完了後など）
   useEffect(() => {
     const onFocus = () => void loadStats();
@@ -167,7 +230,7 @@ export default function DashboardPage() {
   const avatarStyle = profile?.avatar_style ?? null;
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+    <main className="min-h-[calc(100vh-64px)] px-4 py-8">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <DashboardHeader
           userName={userName}
@@ -185,13 +248,22 @@ export default function DashboardPage() {
             </Link>
           }
         />
-        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm">
+        <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm">
           <span className="text-slate-600">
             現在の目標級：
             <span className="font-semibold text-slate-900">
               {targetLevel || "未設定"}
             </span>
           </span>
+          {examCountdown && (
+            <span className="text-slate-600">
+              英検{examCountdown.label}試験日まであと
+              <span className="font-semibold text-slate-900">
+                {examCountdown.daysLeft >= 0 ? examCountdown.daysLeft : 0}
+              </span>
+              日
+            </span>
+          )}
           <Link
             href="/profile"
             className="text-blue-600 hover:text-blue-500 hover:underline"
