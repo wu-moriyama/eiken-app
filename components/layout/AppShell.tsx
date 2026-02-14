@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
+import { checkIsAdmin } from "@/lib/data/admin-db";
 
 interface AppShellProps {
   children: ReactNode;
@@ -14,6 +15,7 @@ export function AppShell({ children }: AppShellProps) {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -21,6 +23,12 @@ export function AppShell({ children }: AppShellProps) {
         data: { user }
       } = await supabase.auth.getUser();
       setIsLoggedIn(!!user);
+      if (user) {
+        const admin = await checkIsAdmin();
+        setIsAdmin(admin);
+      } else {
+        setIsAdmin(false);
+      }
     };
     void checkAuth();
     const {
@@ -114,6 +122,15 @@ export function AppShell({ children }: AppShellProps) {
       >
         バッヂ
       </Link>
+      {isAdmin && (
+        <Link
+          href="/admin"
+          onClick={() => setDrawerOpen(false)}
+          className="text-amber-400 hover:text-amber-300"
+        >
+          管理画面
+        </Link>
+      )}
       <Link
         href="/profile"
         onClick={() => setDrawerOpen(false)}
@@ -252,6 +269,15 @@ export function AppShell({ children }: AppShellProps) {
               >
                 バッヂ
               </Link>
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setDrawerOpen(false)}
+                  className="rounded-lg px-3 py-2 text-amber-400 hover:bg-slate-800 hover:text-amber-300"
+                >
+                  管理画面
+                </Link>
+              )}
               <Link
                 href="/profile"
                 onClick={() => setDrawerOpen(false)}

@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { HiEye, HiEyeSlash } from "react-icons/hi2";
 import { supabase } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -77,15 +79,30 @@ export default function SignupPage() {
             <label className="block text-xs font-medium text-slate-800">
               パスワード
             </label>
-            <input
-              type="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
-              placeholder="8文字以上のパスワード"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 pr-10 text-sm text-slate-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                placeholder="8文字以上のパスワード"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                title={showPassword ? "パスワードを隠す" : "パスワードを表示"}
+                aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
+              >
+                {showPassword ? (
+                  <HiEyeSlash className="h-4 w-4" />
+                ) : (
+                  <HiEye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
           </div>
 
           {error && (
