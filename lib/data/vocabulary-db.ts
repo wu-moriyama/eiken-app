@@ -111,6 +111,7 @@ export type QuizHistoryEntry = {
   word: string;
   meaningJa: string;
   level: string;
+  exampleEn: string | null;
   isCorrect: boolean;
   createdAt: string;
 };
@@ -127,7 +128,7 @@ export async function getQuizHistory(
       vocabulary_id,
       is_correct,
       created_at,
-      vocabulary(word, meaning_ja, level)
+      vocabulary(word, meaning_ja, level, example_en)
     `)
     .eq("user_id", profileId)
     .order("created_at", { ascending: false })
@@ -144,7 +145,7 @@ export async function getQuizHistory(
       vocabulary_id: number;
       is_correct: boolean;
       created_at: string;
-      vocabulary: { word: string; meaning_ja: string; level: string } | null;
+      vocabulary: { word: string; meaning_ja: string; level: string; example_en: string | null } | null;
     };
     return {
       id: r.id,
@@ -152,6 +153,7 @@ export async function getQuizHistory(
       word: r.vocabulary?.word ?? "",
       meaningJa: r.vocabulary?.meaning_ja ?? "",
       level: r.vocabulary?.level ?? "",
+      exampleEn: r.vocabulary?.example_en ?? null,
       isCorrect: r.is_correct,
       createdAt: r.created_at
     };
@@ -164,6 +166,7 @@ export type WrongWordStats = {
   word: string;
   meaningJa: string;
   level: string;
+  exampleEn: string | null;
   wrongCount: number;
 };
 
@@ -172,7 +175,7 @@ export async function getWrongWordStats(
 ): Promise<WrongWordStats[]> {
   const { data, error } = await supabase
     .from("vocabulary_quiz_results")
-    .select("vocabulary_id, vocabulary(word, meaning_ja, level)")
+    .select("vocabulary_id, vocabulary(word, meaning_ja, level, example_en)")
     .eq("user_id", profileId)
     .eq("is_correct", false);
 
@@ -180,12 +183,12 @@ export async function getWrongWordStats(
 
   const countMap = new Map<
     number,
-    { word: string; meaningJa: string; level: string; count: number }
+    { word: string; meaningJa: string; level: string; exampleEn: string | null; count: number }
   >();
   for (const row of data) {
     const r = row as {
       vocabulary_id: number;
-      vocabulary: { word: string; meaning_ja: string; level: string } | null;
+      vocabulary: { word: string; meaning_ja: string; level: string; example_en: string | null } | null;
     };
     const v = r.vocabulary;
     if (!v) continue;
@@ -197,6 +200,7 @@ export async function getWrongWordStats(
         word: v.word,
         meaningJa: v.meaning_ja,
         level: v.level,
+        exampleEn: v.example_en ?? null,
         count: 1
       });
     }
@@ -208,6 +212,7 @@ export async function getWrongWordStats(
       word: v.word,
       meaningJa: v.meaningJa,
       level: v.level,
+      exampleEn: v.exampleEn,
       wrongCount: v.count
     }));
 }

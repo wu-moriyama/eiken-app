@@ -2,17 +2,24 @@
 
 import { useState, useRef, useEffect, Suspense, useCallback } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   fetchRandomEssayPrompt,
   saveWritingSubmission,
   type WritingPrompt
 } from "@/lib/data/writing-db";
-import { getProfileId } from "@/lib/data/vocabulary-db";
+import {
+  getProfileId,
+  getProfileTargetLevel,
+  profileLevelToVocabularyLevel
+} from "@/lib/data/vocabulary-db";
 import { logStudyActivity } from "@/lib/data/study-activity";
+import { getGuestWritingCount, incrementGuestWritingCount, GUEST_WRITING_LIMIT } from "@/lib/guest-usage";
+import { GuestLimitPrompt } from "@/components/GuestLimitPrompt";
 import { WritingResult, type WritingResultData } from "@/components/features/writing/WritingResult";
+import { WritingHintPanel, WritingHintButton } from "@/components/features/writing/WritingHintPanel";
 
-const VALID_ESSAY_LEVELS = ["準2級", "2級", "準1級", "1級"] as const;
+const VALID_ESSAY_LEVELS = ["3級", "準2級", "2級", "準1級", "1級"] as const;
 type EssayLevel = (typeof VALID_ESSAY_LEVELS)[number];
 
 function isValidLevel(s: string | null): s is EssayLevel {
@@ -32,10 +39,14 @@ function getWordCountRange(prompt: WritingPrompt): string {
   return "50〜60語";
 }
 
+const ESSAY_LEVELS: EssayLevel[] = ["3級", "準2級", "2級", "準1級", "1級"];
+
 function WritingEssayContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const levelParam = searchParams.get("level");
-  const level: EssayLevel = isValidLevel(levelParam) ? levelParam : "準2級";
+  const [selectedLevel, setSelectedLevel] = useState<EssayLevel>("3級");
+  const [levelLoaded, setLevelLoaded] = useState(false);
 
   const [content, setContent] = useState("");
   const [isStarted, setIsStarted] = useState(false);
@@ -45,15 +56,58 @@ function WritingEssayContent() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<WritingResultData | null>(null);
+  const [showGuestLimit, setShowGuestLimit] = useState(false);
+  const [isHintOpen, setIsHintOpen] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // URLまたはプロフィール目標級から初期levelを決定
   useEffect(() => {
-    fetchRandomEssayPrompt(level).then((p) => {
-      setPrompt(p ?? null);
-      setLoading(false);
-      if (!p) setError("問題の取得に失敗しました。シードデータを投入してください。");
-    });
-  }, [level]);
+    if (isValidLevel(levelParam)) {
+      setSelectedLevel(levelParam);
+      setLevelLoaded(true);
+      return;
+    }
+    let cancelled = false;
+    getProfileTargetLevel()
+      .then((targetLevel) => {
+        if (cancelled) return;
+        const profileLevel = profileLevelToVocabularyLevel(targetLevel);
+        const defaultLevel: EssayLevel = isValidLevel(profileLevel)
+          ? profileLevel
+          : "3級";
+        setSelectedLevel(defaultLevel);
+        setLevelLoaded(true);
+        router.replace(`/writing/essay?level=${defaultLevel}`);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setSelectedLevel("3級");
+        setLevelLoaded(true);
+        router.replace("/writing/essay?level=3級");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [levelParam, router]);
+
+  // ブラウザ戻るなどでURLが変わったら同期
+  useEffect(() => {
+    if (isValidLevel(levelParam)) setSelectedLevel(levelParam);
+  }, [levelParam]);
+
+  const level = selectedLevel;
+
+  useEffect(() => {
+    if (!levelLoaded) return;
+    setLoading(true);
+    fetchRandomEssayPrompt(level)
+      .then((p) => {
+        setPrompt(p ?? null);
+        if (!p) setError("問題の取得に失敗しました。シードデータを投入してください。");
+      })
+      .catch(() => setError("問題の取得に失敗しました。シードデータを投入してください。"))
+      .finally(() => setLoading(false));
+  }, [levelLoaded, level]);
 
   useEffect(() => {
     if (!isStarted) return;
@@ -69,8 +123,17 @@ function WritingEssayContent() {
 
   const handleSubmit = useCallback(async () => {
     if (!prompt || !content.trim()) return;
-    setSubmitting(true);
     setError(null);
+    const profileId = await getProfileId();
+    if (!profileId) {
+      const count = getGuestWritingCount();
+      if (count >= GUEST_WRITING_LIMIT) {
+        setShowGuestLimit(true);
+        return;
+      }
+      incrementGuestWritingCount();
+    }
+    setSubmitting(true);
     try {
       const res = await fetch("/api/writing/feedback", {
         method: "POST",
@@ -91,7 +154,6 @@ function WritingEssayContent() {
       const data = (await res.json()) as WritingResultData;
       setResult(data);
 
-      const profileId = await getProfileId();
       if (profileId) {
         await saveWritingSubmission({
           userId: profileId,
@@ -138,7 +200,7 @@ function WritingEssayContent() {
   const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
   const wordRange = prompt ? getWordCountRange(prompt) : "50〜60語";
 
-  if (loading) {
+  if (!levelLoaded || loading) {
     return (
       <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
         <div className="mx-auto max-w-2xl">
@@ -185,9 +247,29 @@ function WritingEssayContent() {
     );
   }
 
+  if (showGuestLimit) {
+    return (
+      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+        <div className="mx-auto max-w-2xl">
+          <GuestLimitPrompt type="writing" />
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
-      <div className="mx-auto max-w-2xl">
+      <WritingHintPanel
+        type="essay"
+        level={level}
+        isOpen={isHintOpen}
+        onClose={() => setIsHintOpen(false)}
+      />
+      <WritingHintButton
+        onClick={() => setIsHintOpen((o) => !o)}
+        isOpen={isHintOpen}
+      />
+      <div className="mx-auto max-w-2xl pb-20">
         <div className="mb-4 flex items-center justify-between">
           <Link href="/writing" className="text-sm text-slate-600 hover:text-slate-900">
             ← 形式選択に戻る
@@ -199,9 +281,38 @@ function WritingEssayContent() {
         </div>
 
         <div className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h1 className="text-xl font-semibold text-slate-900">
-            英検{prompt.level} ライティング（英作文）
-          </h1>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <h1 className="text-xl font-semibold text-slate-900">
+              英検 ライティング（英作文）
+            </h1>
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium text-slate-700">級</label>
+              <select
+                value={level}
+                onChange={(e) => {
+                  const l = e.target.value as EssayLevel;
+                  setSelectedLevel(l);
+                  router.replace(`/writing/essay?level=${l}`);
+                  setContent("");
+                  setIsStarted(false);
+                  setLoading(true);
+                  setError(null);
+                  fetchRandomEssayPrompt(l).then((p) => {
+                    setPrompt(p ?? null);
+                    setLoading(false);
+                    if (!p) setError("問題の取得に失敗しました。シードデータを投入してください。");
+                  });
+                }}
+                className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+              >
+                {ESSAY_LEVELS.map((l) => (
+                  <option key={l} value={l}>
+                    英検{l}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <p className="text-xs text-slate-500">
             目安: {wordRange}
           </p>

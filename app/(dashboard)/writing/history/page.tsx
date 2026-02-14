@@ -8,6 +8,9 @@ import {
   type WritingHistoryEntry
 } from "@/lib/data/writing-db";
 import { CorrectedTextWithHighlights } from "@/components/features/writing/CorrectedTextWithHighlights";
+import { ReadAloudButton } from "@/components/features/writing/ReadAloudButton";
+import { getProfileId } from "@/lib/data/vocabulary-db";
+import { logReadingAloudActivity } from "@/lib/data/study-activity";
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -103,7 +106,22 @@ function HistoryCard({
           </div>
           {entry.correctedText && (
             <div>
-              <h4 className="text-xs font-medium text-slate-500 mb-1">添削文</h4>
+              <div className="mb-1 flex flex-wrap items-center gap-2">
+                <h4 className="text-xs font-medium text-slate-500">添削文</h4>
+                <ReadAloudButton
+                  text={entry.correctedText}
+                  label="音声で聞く"
+                  className="border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  onSpeakStart={() => {
+                    getProfileId().then((pid) => {
+                      if (pid) void logReadingAloudActivity(pid);
+                    });
+                  }}
+                />
+              </div>
+              <p className="mb-2 text-xs text-amber-700">
+                音読してみよう！正しい発音を聞いて、自分でも声に出して読むと学習効果が上がります。
+              </p>
               <div className="rounded-lg bg-white p-3 border border-slate-100">
                 <CorrectedTextWithHighlights text={entry.correctedText} />
               </div>

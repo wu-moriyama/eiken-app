@@ -16,11 +16,19 @@ import {
   saveQuizResult
 } from "@/lib/data/vocabulary-db";
 import { logStudyActivity } from "@/lib/data/study-activity";
+import {
+  getGuestVocabularyCount,
+  incrementGuestVocabularyCount,
+  GUEST_VOCABULARY_LIMIT,
+} from "@/lib/guest-usage";
+import { GuestLimitPrompt } from "@/components/GuestLimitPrompt";
 
 export default function VocabularyPage() {
   const [stage, setStage] = useState<"select" | "session" | "result">("select");
   const [selectedLevel, setSelectedLevel] = useState<string>("");
   const [levelLoaded, setLevelLoaded] = useState(false);
+  const [showGuestLimit, setShowGuestLimit] = useState(false);
+  const [isGuest, setIsGuest] = useState<boolean | null>(null);
   const [items, setItems] = useState<VocabularyItem[]>([]);
   const [optionPool, setOptionPool] = useState<VocabularyItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -32,8 +40,12 @@ export default function VocabularyPage() {
 
   // 目標級が設定されていればデフォルトで選択、未設定なら空のまま自分で選ぶ
   useEffect(() => {
-    getProfileTargetLevel().then((targetLevel) => {
+    Promise.all([
+      getProfileTargetLevel(),
+      getProfileId(),
+    ]).then(([targetLevel, profileId]) => {
       setLevelLoaded(true);
+      setIsGuest(!profileId);
       if (!targetLevel) return;
       const vocabLevel = profileLevelToVocabularyLevel(targetLevel);
       if (VOCABULARY_LEVELS.includes(vocabLevel as (typeof VOCABULARY_LEVELS)[number])) {
@@ -43,11 +55,20 @@ export default function VocabularyPage() {
   }, []);
 
   const startSession = async () => {
-    setLoading(true);
     setError(null);
+    setShowGuestLimit(false);
+    const pid = await getProfileId();
+    profileIdRef.current = pid;
+    if (!pid) {
+      const count = getGuestVocabularyCount();
+      if (count >= GUEST_VOCABULARY_LIMIT) {
+        setShowGuestLimit(true);
+        return;
+      }
+      incrementGuestVocabularyCount();
+    }
+    setLoading(true);
     try {
-      const pid = await getProfileId();
-      profileIdRef.current = pid;
       // ログイン時は間違えた単語を優先、10問 + 誤答候補用に80語取得
       const pool = await fetchVocabularyFromSupabase(
         selectedLevel,
@@ -114,6 +135,16 @@ export default function VocabularyPage() {
     sessionStartRef.current = null;
   }, [stage, items.length, correctCount]);
 
+  if (showGuestLimit) {
+    return (
+      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+        <div className="mx-auto max-w-xl">
+          <GuestLimitPrompt type="vocabulary" />
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
       <div className="mx-auto max-w-xl">
@@ -125,6 +156,11 @@ export default function VocabularyPage() {
             <p className="text-sm text-slate-600">
               レベルを選んで学習を開始しましょう。選んだ級の単語から10問が出題されます。ログイン中は間違えた単語が優先して出題されます。
             </p>
+            {isGuest && levelLoaded && (
+              <p className="text-xs text-slate-500">
+                ゲストの方は{GUEST_VOCABULARY_LIMIT}回までお試しいただけます。（残り{Math.max(0, GUEST_VOCABULARY_LIMIT - getGuestVocabularyCount())}回）
+              </p>
+            )}
             <div className="space-y-2">
               <label className="block text-xs font-medium text-slate-700">
                 レベル

@@ -9,6 +9,9 @@ import {
   type QuizHistoryEntry,
   type WrongWordStats
 } from "@/lib/data/vocabulary-db";
+import { ReadAloudButton } from "@/components/features/writing/ReadAloudButton";
+import { getProfileId } from "@/lib/data/vocabulary-db";
+import { logReadingAloudActivity } from "@/lib/data/study-activity";
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -128,20 +131,42 @@ export default function VocabularyHistoryPage() {
                 {wrongStats.map((s) => (
                   <li
                     key={s.vocabularyId}
-                    className="flex items-center justify-between rounded-lg border border-slate-100 bg-slate-50 px-4 py-3"
+                    className="flex flex-col gap-2 rounded-lg border border-slate-100 bg-slate-50 px-4 py-3"
                   >
-                    <div>
-                      <span className="font-medium text-slate-900">{s.word}</span>
-                      <span className="ml-2 text-xs text-slate-500">
-                        英検{s.level}
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <span className="font-medium text-slate-900">{s.word}</span>
+                        <span className="ml-2 text-xs text-slate-500">
+                          英検{s.level}
+                        </span>
+                        <p className="mt-0.5 text-sm text-slate-600">
+                          {s.meaningJa}
+                        </p>
+                      </div>
+                      <span className="shrink-0 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
+                        {s.wrongCount}回
                       </span>
-                      <p className="mt-0.5 text-sm text-slate-600">
-                        {s.meaningJa}
-                      </p>
                     </div>
-                    <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
-                      {s.wrongCount}回
-                    </span>
+                    {s.exampleEn && (
+                      <div className="mt-1 border-t border-slate-200 pt-2">
+                        <p className="mb-1 text-xs text-amber-700">
+                          例文を音読してみよう！
+                        </p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <ReadAloudButton
+                            text={s.exampleEn}
+                            label="例文を聞く"
+                            className="border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                            onSpeakStart={() => {
+                              getProfileId().then((pid) => {
+                                if (pid) void logReadingAloudActivity(pid);
+                              });
+                            }}
+                          />
+                          <span className="text-sm text-slate-600">{s.exampleEn}</span>
+                        </div>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -163,21 +188,38 @@ export default function VocabularyHistoryPage() {
                 {history.map((e) => (
                   <li
                     key={e.id}
-                    className="flex items-center justify-between rounded-lg border border-slate-100 px-4 py-2 text-sm"
+                    className="flex flex-col gap-2 rounded-lg border border-slate-100 px-4 py-2 text-sm"
                   >
-                    <span className="font-medium text-slate-900">{e.word}</span>
-                    <span
-                      className={
-                        e.isCorrect
-                          ? "text-emerald-600"
-                          : "text-red-600"
-                      }
-                    >
-                      {e.isCorrect ? "正解" : "不正解"}
-                    </span>
-                    <span className="text-xs text-slate-500">
-                      {formatDate(e.createdAt)}
-                    </span>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-slate-900">{e.word}</span>
+                      <span
+                        className={
+                          e.isCorrect
+                            ? "text-emerald-600"
+                            : "text-red-600"
+                        }
+                      >
+                        {e.isCorrect ? "正解" : "不正解"}
+                      </span>
+                      <span className="text-xs text-slate-500">
+                        {formatDate(e.createdAt)}
+                      </span>
+                    </div>
+                    {e.exampleEn && (
+                      <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-2">
+                        <ReadAloudButton
+                          text={e.exampleEn}
+                          label="例文を聞く"
+                          className="border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                          onSpeakStart={() => {
+                            getProfileId().then((pid) => {
+                              if (pid) void logReadingAloudActivity(pid);
+                            });
+                          }}
+                        />
+                        <span className="text-sm text-slate-600">{e.exampleEn}</span>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>

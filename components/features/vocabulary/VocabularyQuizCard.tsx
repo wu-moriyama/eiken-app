@@ -4,6 +4,9 @@ import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { VocabularyItem } from "@/lib/data/sample-vocabulary";
 import type { QuizOption } from "@/lib/data/sample-vocabulary";
+import { ReadAloudButton } from "@/components/features/writing/ReadAloudButton";
+import { getProfileId } from "@/lib/data/vocabulary-db";
+import { logReadingAloudActivity } from "@/lib/data/study-activity";
 
 interface VocabularyQuizCardProps {
   item: VocabularyItem;
@@ -113,9 +116,28 @@ export function VocabularyQuizCard({
                 </p>
               )}
               {(item.example_en || item.example_ja) && (
-                <div className="mt-2 space-y-1 text-sm text-slate-600">
-                  {item.example_en && <p>{item.example_en}</p>}
-                  {item.example_ja && <p className="italic text-slate-500">{item.example_ja}</p>}
+                <div className="mt-2 space-y-2">
+                  <p className="text-xs text-amber-700">
+                    例文を音読してみよう！聞いてから声に出して読むと学習効果が上がります。
+                  </p>
+                  {item.example_en && (
+                    <div className="flex flex-wrap items-center gap-2">
+                        <ReadAloudButton
+                          text={item.example_en}
+                          label="例文を聞く"
+                          className="border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                          onSpeakStart={() => {
+                            getProfileId().then((pid) => {
+                              if (pid) void logReadingAloudActivity(pid);
+                            });
+                          }}
+                        />
+                      <span className="text-sm text-slate-600">{item.example_en}</span>
+                    </div>
+                  )}
+                  {item.example_ja && (
+                    <p className="text-sm italic text-slate-500">{item.example_ja}</p>
+                  )}
                 </div>
               )}
             </div>

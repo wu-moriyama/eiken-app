@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { CorrectedTextWithHighlights } from "./CorrectedTextWithHighlights";
+import { ReadAloudButton } from "./ReadAloudButton";
+import { getProfileId } from "@/lib/data/vocabulary-db";
+import { logReadingAloudActivity } from "@/lib/data/study-activity";
 
 /** レーダーチャート（5軸、0-5スケール） */
 function ScoreRadarChart({
@@ -179,12 +182,27 @@ export function WritingResult({ data, level, promptType, onNewProblem }: Writing
       </div>
 
       <div>
-        <h3 className="mb-2 text-sm font-medium text-slate-700">
-          添削文
-          <span className="ml-2 text-xs font-normal text-slate-500">
-            （赤字・太字＝修正箇所）
-          </span>
-        </h3>
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <h3 className="text-sm font-medium text-slate-700">
+            添削文
+            <span className="ml-2 text-xs font-normal text-slate-500">
+              （赤字・太字＝修正箇所）
+            </span>
+          </h3>
+          <ReadAloudButton
+            text={data.corrected_text}
+            label="音声で聞く"
+            className="border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+            onSpeakStart={() => {
+              getProfileId().then((pid) => {
+                if (pid) void logReadingAloudActivity(pid);
+              });
+            }}
+          />
+        </div>
+        <p className="mb-2 text-xs text-amber-700">
+          音読してみよう！正しい発音を聞いて、自分でも声に出して読むと学習効果が上がります。
+        </p>
         <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
           <CorrectedTextWithHighlights text={data.corrected_text} />
         </div>

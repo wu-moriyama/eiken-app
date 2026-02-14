@@ -88,6 +88,20 @@ export async function getStreak(
   };
 }
 
+/** 音読ボタンクリック時の学習時間（秒） */
+export const READING_ALOUD_SECONDS = 10;
+
+/**
+ * 音読活動を記録（10秒としてカウント）
+ */
+export async function logReadingAloudActivity(
+  profileId: string
+): Promise<void> {
+  await logStudyActivity(profileId, "reading_aloud", {
+    seconds: READING_ALOUD_SECONDS
+  });
+}
+
 /**
  * 学習活動を記録し、連続学習日数を更新
  * クイズ完了時などに呼び出す

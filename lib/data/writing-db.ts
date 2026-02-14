@@ -1,10 +1,14 @@
 import { supabase } from "@/lib/supabase/client";
 
-/** Eメール形式のプロンプトデータ */
+/** Eメール形式のプロンプトデータ（3級・準2級共通） */
 export interface EmailPromptData {
   emailFrom: string;
   emailContent: string;
   instruction?: string;
+  /** 準2級のみ: 下線部のテキスト */
+  underlinedPart?: string;
+  /** 準2級のみ: 返信で答えるべき質問 */
+  question?: string;
 }
 
 /** ライティング問題 */
@@ -274,6 +278,11 @@ export async function getWritingSubmissionCount(
       (row.writing_prompts as { level?: string } | null)?.level === level
   ).length;
   return count;
+}
+
+/** 準2級Eメール形式かどうか */
+export function isJun2kyuEmailFormat(data: EmailPromptData): boolean {
+  return Boolean(data.underlinedPart && data.question);
 }
 
 /** プロンプトの prompt フィールドを Eメール用 JSON としてパース */
