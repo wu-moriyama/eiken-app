@@ -22,6 +22,27 @@ export async function getModuleActivityCounts(
   return counts;
 }
 
+/** 累計学習時間（秒）を取得 */
+export async function getTotalStudySeconds(
+  profileId: string
+): Promise<number> {
+  const { data, error } = await supabase
+    .from("user_activity_log")
+    .select("payload")
+    .eq("user_id", profileId);
+
+  if (error) return 0;
+
+  let total = 0;
+  for (const row of data ?? []) {
+    const p = row.payload as { seconds?: number } | null;
+    if (p?.seconds && typeof p.seconds === "number") {
+      total += p.seconds;
+    }
+  }
+  return total;
+}
+
 /** 今日の学習時間（秒）を取得 */
 export async function getTodayStudySeconds(
   profileId: string

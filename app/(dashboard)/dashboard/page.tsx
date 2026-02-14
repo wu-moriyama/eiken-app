@@ -6,16 +6,30 @@ import { DashboardHeader } from "@/components/features/dashboard/DashboardHeader
 import { TodayPlanCard } from "@/components/features/dashboard/TodayPlanCard";
 import { StatsGrid } from "@/components/features/dashboard/StatsGrid";
 import { LearningModulesGrid } from "@/components/features/dashboard/LearningModulesGrid";
+import { BadgePopup } from "@/components/features/badges/BadgePopup";
 import { supabase } from "@/lib/supabase/client";
 import {
   getProfileId,
-  getVocabularyProficiency
+  getVocabularyProficiency,
+  getVocabularyQuizSessionCount
 } from "@/lib/data/vocabulary-db";
 import {
   getTodayStudySeconds,
   getStreak,
-  getModuleActivityCounts
+  getModuleActivityCounts,
+  getTotalStudySeconds
 } from "@/lib/data/study-activity";
+import {
+  getWritingSubmissionCount,
+  getTotalWritingCount
+} from "@/lib/data/writing-db";
+import {
+  checkAndEarnBadges,
+  getUnshownBadge,
+  markBadgePopupShown,
+  getBadgeDef,
+  type UserBadge
+} from "@/lib/data/badges";
 
 interface ProfileState {
   display_name: string | null;
@@ -36,6 +50,8 @@ export default function DashboardPage() {
   const [activityCounts, setActivityCounts] = useState<
     Record<string, number>
   >({});
+  const [writingCount, setWritingCount] = useState<number | null>(null);
+  const [badgePopup, setBadgePopup] = useState<UserBadge | null>(null);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -63,31 +79,86 @@ export default function DashboardPage() {
     void loadProfile();
   }, []);
 
+  const handleBadgePopupClose = async () => {
+    const profileId = await getProfileId();
+    if (!profileId || !badgePopup) {
+      setBadgePopup(null);
+      return;
+    }
+    await markBadgePopupShown(profileId, badgePopup.badgeKey);
+    const next = await getUnshownBadge(profileId);
+    setBadgePopup(next);
+  };
+
   const loadStats = async () => {
     const profileId = await getProfileId();
     if (!profileId) return;
+
     const targetLevel = profile?.target_level ?? null;
-    const [seconds, streak, proficiency, counts] = await Promise.all([
+    const [
+      seconds,
+      streak,
+      proficiency,
+      counts,
+      wCount,
+      vocabSessions,
+      totalWriting,
+      totalStudySecs
+    ] = await Promise.all([
       getTodayStudySeconds(profileId),
       getStreak(profileId),
       getVocabularyProficiency(profileId, targetLevel),
-      getModuleActivityCounts(profileId)
+      getModuleActivityCounts(profileId),
+      getWritingSubmissionCount(profileId, targetLevel, 7),
+      getVocabularyQuizSessionCount(profileId),
+      getTotalWritingCount(profileId),
+      getTotalStudySeconds(profileId)
     ]);
     setTodayStudyMinutes(Math.round(seconds / 60));
     setStreakDays(streak.current);
     setVocabProficiency(proficiency);
     setActivityCounts(counts);
+    setWritingCount(wCount);
+
+    const newlyEarned = await checkAndEarnBadges(profileId, {
+      vocabQuizCount: vocabSessions,
+      writingCount: totalWriting,
+      totalStudySeconds: totalStudySecs,
+      currentStreak: streak.current,
+      hasStudied: totalStudySecs > 0
+    });
+    if (newlyEarned.length > 0) {
+      const first = getBadgeDef(newlyEarned[0]);
+      if (first) {
+        setBadgePopup({
+          badgeKey: newlyEarned[0],
+          earnedAt: new Date().toISOString(),
+          popupShown: false,
+          def: first
+        });
+      }
+    } else {
+      const unshown = await getUnshownBadge(profileId);
+      if (unshown) setBadgePopup(unshown);
+    }
   };
 
   useEffect(() => {
     void loadStats();
   }, [profile?.target_level]);
 
-  // タブに戻ったときにも再取得（クイズ完了後など）
+  // タブに戻ったとき・ページ復元時にも再取得（クイズ・ライティング完了後など）
   useEffect(() => {
     const onFocus = () => void loadStats();
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) void loadStats(); // bfcache からの復元時
+    };
     window.addEventListener("focus", onFocus);
-    return () => window.removeEventListener("focus", onFocus);
+    window.addEventListener("pageshow", onPageShow);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("pageshow", onPageShow);
+    };
   }, []);
 
   const userName = profile?.display_name ?? "ゲスト";
@@ -135,9 +206,14 @@ export default function DashboardPage() {
         <StatsGrid
           targetLevel={targetLevel}
           vocabProficiency={vocabProficiency}
+          writingCount={writingCount}
         />
         <LearningModulesGrid targetLevel={targetLevel} />
       </div>
+
+      {badgePopup && (
+        <BadgePopup badge={badgePopup} onClose={handleBadgePopupClose} />
+      )}
     </main>
   );
 }

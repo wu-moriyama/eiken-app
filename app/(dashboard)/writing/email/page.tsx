@@ -1,13 +1,17 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   fetchRandomEmailPrompt,
   parseEmailPromptData,
+  saveWritingSubmission,
   type WritingPrompt,
   type EmailPromptData
 } from "@/lib/data/writing-db";
+import { getProfileId } from "@/lib/data/vocabulary-db";
+import { logStudyActivity } from "@/lib/data/study-activity";
+import { WritingResult, type WritingResultData } from "@/components/features/writing/WritingResult";
 
 function getInstruction(emailFrom: string): string {
   return `あなたは、外国人の友達（${emailFrom}）から以下のEメールを受け取りました。
@@ -30,6 +34,8 @@ export default function WritingEmailPage() {
   const [prompt, setPrompt] = useState<WritingPrompt | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState<WritingResultData | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -55,6 +61,78 @@ export default function WritingEmailPage() {
   const promptData: EmailPromptData | null = prompt
     ? parseEmailPromptData(prompt.prompt)
     : null;
+
+  const handleSubmit = useCallback(async () => {
+    if (!prompt || !promptData || !content.trim()) return;
+    const fullContent = `Hi, ${promptData.emailFrom}!\nThank you for your e-mail.\n${content.trim()}\nBest wishes,`;
+    const fullPromptText = `${getInstruction(promptData.emailFrom)}\n\n${promptData.emailFrom}からのメール:\n${promptData.emailContent}`;
+
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/writing/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          level: "3級",
+          promptType: "email",
+          promptText: fullPromptText,
+          userContent: fullContent,
+          wordCountMin: prompt.word_count_min,
+          wordCountMax: prompt.word_count_max
+        })
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error ?? "添削に失敗しました");
+      }
+      const data = (await res.json()) as WritingResultData;
+      setResult(data);
+
+      const profileId = await getProfileId();
+      if (profileId) {
+        await saveWritingSubmission({
+          userId: profileId,
+          promptId: prompt.id,
+          content: fullContent,
+          timeSeconds: elapsed,
+          overallScore: data.overall_score,
+          vocabularyScore: data.vocabulary_score,
+          grammarScore: data.grammar_score,
+          contentScore: data.content_score,
+          organizationScore: data.organization_score,
+          instructionScore: data.instruction_score,
+          correctedText: data.corrected_text,
+          feedback: data.feedback
+        });
+        await logStudyActivity(profileId, "writing", {
+          seconds: elapsed,
+          prompt_id: prompt.id,
+          level: "3級",
+          prompt_type: "email",
+          overall_score: data.overall_score
+        });
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "添削に失敗しました。");
+    } finally {
+      setSubmitting(false);
+    }
+  }, [prompt, promptData, content, elapsed]);
+
+  const handleNewProblem = useCallback(() => {
+    setResult(null);
+    setContent("");
+    setIsStarted(false);
+    setError(null);
+    setLoading(true);
+    fetchRandomEmailPrompt("3級").then((p) => {
+      setPrompt(p ?? null);
+      setLoading(false);
+      if (!p) setError("問題の取得に失敗しました。");
+    });
+  }, []);
+
   const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
 
   if (loading) {
@@ -62,6 +140,23 @@ export default function WritingEmailPage() {
       <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <p className="text-center text-slate-600">読み込み中...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (result) {
+    return (
+      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+        <div className="mx-auto max-w-2xl">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <WritingResult
+              data={result}
+              level="3級"
+              promptType="email"
+              onNewProblem={handleNewProblem}
+            />
+          </div>
         </div>
       </main>
     );
@@ -156,20 +251,25 @@ export default function WritingEmailPage() {
               書き始める
             </button>
           ) : (
-            <div className="flex gap-3">
-              <button
-                type="button"
-                className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
-              >
-                提出する（AI添削）
-              </button>
-              <Link
-                href="/writing"
-                className="rounded-full border border-slate-300 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50"
-              >
-                やめる
-              </Link>
-            </div>
+            <>
+              {error && <p className="text-sm text-red-600">{error}</p>}
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={submitting}
+                  className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {submitting ? "添削中..." : "提出する（AI添削）"}
+                </button>
+                <Link
+                  href="/writing"
+                  className="rounded-full border border-slate-300 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+                  やめる
+                </Link>
+              </div>
+            </>
           )}
         </div>
       </div>

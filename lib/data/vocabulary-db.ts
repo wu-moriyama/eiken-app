@@ -91,6 +91,19 @@ export async function getProfileTargetLevel(): Promise<string | null> {
   return data?.target_level ?? null;
 }
 
+/** 単語クイズのセッション数（10問＝1セッション）を取得 */
+export async function getVocabularyQuizSessionCount(
+  profileId: string
+): Promise<number> {
+  const { count, error } = await supabase
+    .from("vocabulary_quiz_results")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", profileId);
+
+  if (error) return 0;
+  return Math.floor((count ?? 0) / 10);
+}
+
 /** 過去のクイズ履歴（単語ごとの正誤・回答日時） */
 export type QuizHistoryEntry = {
   id: number;

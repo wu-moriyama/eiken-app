@@ -44,12 +44,75 @@ export function AppShell({ children }: AppShellProps) {
       >
         ダッシュボード
       </Link>
+
+      {/* 単語 ドロップダウン */}
+      <div className="group relative">
+        <button
+          type="button"
+          className="flex items-center gap-0.5 hover:text-brand-300"
+        >
+          単語
+          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div className="invisible absolute left-0 top-full pt-0.5 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
+          <div className="min-w-[140px] rounded-lg border border-slate-700 bg-slate-900 py-1 shadow-lg">
+            <Link
+              href="/vocabulary"
+              onClick={() => setDrawerOpen(false)}
+              className="block px-4 py-2 text-left hover:bg-slate-800 hover:text-brand-300"
+            >
+              単語クイズ
+            </Link>
+            <Link
+              href="/vocabulary/history"
+              onClick={() => setDrawerOpen(false)}
+              className="block px-4 py-2 text-left hover:bg-slate-800 hover:text-brand-300"
+            >
+              学習履歴
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ライティング ドロップダウン */}
+      <div className="group relative">
+        <button
+          type="button"
+          className="flex items-center gap-0.5 hover:text-brand-300"
+        >
+          ライティング
+          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div className="invisible absolute left-0 top-full pt-0.5 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
+          <div className="min-w-[140px] rounded-lg border border-slate-700 bg-slate-900 py-1 shadow-lg">
+            <Link
+              href="/writing"
+              onClick={() => setDrawerOpen(false)}
+              className="block px-4 py-2 text-left hover:bg-slate-800 hover:text-brand-300"
+            >
+              英文添削
+            </Link>
+            <Link
+              href="/writing/history"
+              onClick={() => setDrawerOpen(false)}
+              className="block px-4 py-2 text-left hover:bg-slate-800 hover:text-brand-300"
+            >
+              学習履歴
+            </Link>
+          </div>
+        </div>
+      </div>
+
       <Link
-        href="/vocabulary"
+        href="/badges"
         onClick={() => setDrawerOpen(false)}
         className="hover:text-brand-300"
       >
-        単語
+        バッヂ
       </Link>
       <Link
         href="/profile"
@@ -152,12 +215,42 @@ export function AppShell({ children }: AppShellProps) {
               >
                 ダッシュボード
               </Link>
+              <div className="rounded-lg px-3 py-2 text-slate-400">単語</div>
               <Link
                 href="/vocabulary"
                 onClick={() => setDrawerOpen(false)}
+                className="rounded-lg pl-6 pr-3 py-2 hover:bg-slate-800 hover:text-brand-300"
+              >
+                単語クイズ
+              </Link>
+              <Link
+                href="/vocabulary/history"
+                onClick={() => setDrawerOpen(false)}
+                className="rounded-lg pl-6 pr-3 py-2 hover:bg-slate-800 hover:text-brand-300"
+              >
+                学習履歴
+              </Link>
+              <div className="rounded-lg px-3 py-2 text-slate-400">ライティング</div>
+              <Link
+                href="/writing"
+                onClick={() => setDrawerOpen(false)}
+                className="rounded-lg pl-6 pr-3 py-2 hover:bg-slate-800 hover:text-brand-300"
+              >
+                英文添削
+              </Link>
+              <Link
+                href="/writing/history"
+                onClick={() => setDrawerOpen(false)}
+                className="rounded-lg pl-6 pr-3 py-2 hover:bg-slate-800 hover:text-brand-300"
+              >
+                学習履歴
+              </Link>
+              <Link
+                href="/badges"
+                onClick={() => setDrawerOpen(false)}
                 className="rounded-lg px-3 py-2 hover:bg-slate-800 hover:text-brand-300"
               >
-                単語
+                バッヂ
               </Link>
               <Link
                 href="/profile"

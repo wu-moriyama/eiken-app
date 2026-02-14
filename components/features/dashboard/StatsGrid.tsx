@@ -8,9 +8,14 @@ interface StatCardProps {
 interface StatsGridProps {
   targetLevel?: string | null;
   vocabProficiency?: { percentage: number; mastered: number; total: number } | null;
+  writingCount?: number | null;
 }
 
-export function StatsGrid({ targetLevel, vocabProficiency }: StatsGridProps) {
+export function StatsGrid({
+  targetLevel,
+  vocabProficiency,
+  writingCount
+}: StatsGridProps) {
   const vocabValue =
     vocabProficiency != null && vocabProficiency.total > 0
       ? `${vocabProficiency.percentage}%`
@@ -32,8 +37,16 @@ export function StatsGrid({ targetLevel, vocabProficiency }: StatsGridProps) {
       />
       <StatCard
         label="ライティング提出数"
-        value="3本"
-        subLabel="直近7日"
+        value={
+          writingCount != null
+            ? `${writingCount}本`
+            : "—"
+        }
+        subLabel={
+          writingCount != null
+            ? `${targetLevel || "目標級"} · 直近7日`
+            : "目標級を設定すると表示"
+        }
         tone="green"
       />
       <StatCard

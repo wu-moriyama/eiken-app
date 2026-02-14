@@ -209,8 +209,8 @@ export default function ProfilePage() {
 
   if (requiresLogin) {
     return (
-      <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 bg-slate-50">
-        <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-sm space-y-4">
+      <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+        <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-sm space-y-4">
           <h1 className="text-lg font-semibold text-slate-900">
             ログインが必要です
           </h1>
@@ -230,8 +230,8 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 bg-slate-50">
-      <div className="w-full max-w-md space-y-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+    <main className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-8">
+      <div className="mx-auto max-w-md space-y-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
             プロフィール設定
