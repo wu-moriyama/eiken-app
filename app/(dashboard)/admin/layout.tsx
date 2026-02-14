@@ -9,6 +9,7 @@ const ADMIN_NAV = [
   { href: "/admin", label: "管理トップ" },
   { href: "/admin/settings", label: "基本設定" },
   { href: "/admin/backgrounds", label: "背景設定" },
+  { href: "/admin/avatars", label: "アバター設定" },
   { href: "/admin/users", label: "ユーザー管理" },
   { href: "/admin/vocabulary", label: "単語管理" },
   { href: "/admin/writing", label: "ライティング問題" }
@@ -36,7 +37,7 @@ export default function AdminLayout({
 
   if (status === "loading") {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center">
+      <div className="flex min-h-[40vh] w-full items-center justify-center bg-slate-950">
         <p className="text-slate-400">確認中...</p>
       </div>
     );
@@ -47,7 +48,7 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-56px)]">
+    <div className="flex min-h-[calc(100vh-56px)] w-full bg-slate-950">
       <aside className="w-52 shrink-0 border-r border-slate-800 bg-slate-900/30">
         <nav className="sticky top-0 p-4">
           <p className="mb-4 text-xs font-medium uppercase tracking-wider text-slate-500">

@@ -433,3 +433,52 @@ export async function adminUpsertMonthlyBackground(
 
   if (error) throw new Error(error.message);
 }
+
+// ========== アバタープリセット ==========
+
+export interface AvatarPresetRow {
+  id: string;
+  name: string;
+  image_url: string;
+  sort_order: number;
+}
+
+export async function adminGetAvatarPresets(): Promise<AvatarPresetRow[]> {
+  const { data, error } = await supabase
+    .from("avatar_presets")
+    .select("id, name, image_url, sort_order")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((r) => ({
+    id: r.id as string,
+    name: r.name as string,
+    image_url: r.image_url as string,
+    sort_order: (r.sort_order as number) ?? 0
+  }));
+}
+
+export async function adminCreateAvatarPreset(
+  name: string,
+  imageUrl: string
+): Promise<string> {
+  const { data, error } = await supabase
+    .from("avatar_presets")
+    .insert({ name, image_url: imageUrl })
+    .select("id")
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+  if (!data?.id) throw new Error("Failed to create avatar preset");
+  return data.id as string;
+}
+
+export async function adminDeleteAvatarPreset(id: string) {
+  const { error } = await supabase
+    .from("avatar_presets")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+}

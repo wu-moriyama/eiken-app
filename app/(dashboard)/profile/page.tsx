@@ -29,6 +29,7 @@ import {
   getDatesByRound,
   type ExamRoundOption
 } from "@/lib/data/eiken-exam-db";
+import { getAvatarPresets, type AvatarPreset } from "@/lib/data/avatar-presets";
 import {
   checkAndEarnProfileBadges,
   getBadgeDef,
@@ -47,7 +48,8 @@ export default function ProfilePage() {
   const [canEditEmail, setCanEditEmail] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [avatarStyle, setAvatarStyle] = useState<string | null>(null);
-  const [avatarTab, setAvatarTab] = useState<"preset" | "upload">("preset");
+  const [avatarTab, setAvatarTab] = useState<"preset" | "registered" | "upload">("preset");
+  const [avatarPresets, setAvatarPresets] = useState<AvatarPreset[]>([]);
   const [targetExam, setTargetExam] = useState<string>("");
   const [examOptions, setExamOptions] = useState<ExamRoundOption[]>([]);
   const [primaryDate, setPrimaryDate] = useState<string>("");
@@ -124,6 +126,9 @@ export default function ProfilePage() {
       }
       const opts = examOptionsRes;
       setExamOptions(opts);
+
+      const presets = await getAvatarPresets();
+      setAvatarPresets(presets);
       // 年度・回はあるが日程が未設定の場合、DBから取得してセット
       if (data) {
         const y = data.target_exam_year;
@@ -413,7 +418,7 @@ export default function ProfilePage() {
                   )}
                 </div>
                 <div className="flex flex-col gap-2 text-[11px] text-slate-600">
-                  <div className="inline-flex rounded-full bg-slate-100 p-[2px] text-[11px]">
+                  <div className="inline-flex flex-wrap gap-1 rounded-full bg-slate-100 p-[2px] text-[11px]">
                     <button
                       type="button"
                       onClick={() => setAvatarTab("preset")}
@@ -424,6 +429,17 @@ export default function ProfilePage() {
                       }`}
                     >
                       プリセット
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAvatarTab("registered")}
+                      className={`px-3 py-1 rounded-full ${
+                        avatarTab === "registered"
+                          ? "bg-white text-slate-900 border border-slate-300"
+                          : "text-slate-600"
+                      }`}
+                    >
+                      登録アバター
                     </button>
                     <button
                       type="button"
@@ -476,6 +492,42 @@ export default function ProfilePage() {
                       {a.emoji}
                     </button>
                   ))}
+                </div>
+              )}
+              {avatarTab === "registered" && (
+                <div className="grid grid-cols-6 gap-2">
+                  {avatarPresets.length === 0 ? (
+                    <p className="col-span-full text-xs text-slate-500">
+                      登録されているアバターはありません
+                    </p>
+                  ) : (
+                    avatarPresets.map((a) => {
+                      const isSelected = avatarUrl === a.image_url;
+                      return (
+                        <button
+                          type="button"
+                          key={a.id}
+                          onClick={() => {
+                            setAvatarUrl(a.image_url);
+                            setAvatarStyle("custom");
+                          }}
+                          className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border ${
+                            isSelected
+                              ? "border-blue-500 shadow-sm ring-2 ring-blue-200"
+                              : "border-slate-200"
+                          }`}
+                          title={a.name}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={a.image_url}
+                            alt={a.name}
+                            className="h-full w-full object-cover"
+                          />
+                        </button>
+                      );
+                    })
+                  )}
                 </div>
               )}
             </div>
