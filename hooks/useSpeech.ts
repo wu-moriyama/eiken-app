@@ -2,11 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const SpeechRecognitionImpl =
-  typeof window !== "undefined"
-    ? (window.SpeechRecognition ||
-        (window as any).webkitSpeechRecognition)
-    : null;
+// SpeechRecognition is not in TypeScript's Window interface (browser-specific API)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const win = typeof window !== "undefined" ? (window as any) : null;
+const SpeechRecognitionImpl = win ? (win.SpeechRecognition || win.webkitSpeechRecognition) ?? null : null;
 
 export function useSpeechRecognition(lang: string = "en-US") {
   const [isSupported] = useState<boolean>(() => !!SpeechRecognitionImpl);
