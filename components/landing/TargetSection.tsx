@@ -21,7 +21,7 @@ export function TargetSection() {
               key={i}
               className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
             >
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#50c2cb]/20 text-sm font-bold text-[#50c2cb]">
                 ✓
               </span>
               <span className="text-slate-700">{t}</span>

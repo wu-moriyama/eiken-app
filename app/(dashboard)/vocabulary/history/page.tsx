@@ -69,7 +69,7 @@ export default function VocabularyHistoryPage() {
           </p>
           <Link
             href="/login"
-            className="mt-4 inline-block rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
+            className="mt-4 inline-block rounded-full bg-[#50c2cb] px-4 py-2 text-sm font-semibold text-white hover:bg-[#46adb5]"
           >
             ログイン
           </Link>

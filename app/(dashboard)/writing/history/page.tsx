@@ -9,7 +9,6 @@ import {
 } from "@/lib/data/writing-db";
 import { CorrectedTextWithHighlights } from "@/components/features/writing/CorrectedTextWithHighlights";
 import { ReadAloudButton } from "@/components/features/writing/ReadAloudButton";
-import { getProfileId } from "@/lib/data/vocabulary-db";
 import { logReadingAloudActivity } from "@/lib/data/study-activity";
 
 function formatDate(iso: string) {
@@ -38,7 +37,12 @@ function HistoryCard({
   expanded: boolean;
   onToggle: () => void;
 }) {
-  const typeLabel = entry.promptType === "email" ? "Eメール" : "英作文";
+  const typeLabel =
+    entry.promptType === "email"
+      ? "Eメール"
+      : entry.promptType === "summary"
+        ? "要約"
+        : "英作文";
   return (
     <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
       <button
@@ -55,7 +59,7 @@ function HistoryCard({
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-lg font-semibold text-blue-600">
+          <span className="text-lg font-semibold text-[#50c2cb]">
             {entry.overallScore.toFixed(1)}
           </span>
           <svg
@@ -130,7 +134,7 @@ function HistoryCard({
           {entry.feedback && (
             <div>
               <h4 className="text-xs font-medium text-slate-500 mb-1">フィードバック</h4>
-              <p className="whitespace-pre-wrap text-sm text-slate-800 rounded-lg bg-blue-50/50 p-3 border border-blue-100">
+              <p className="whitespace-pre-wrap text-sm text-slate-800 rounded-lg bg-[#50c2cb]/10 p-3 border border-[#50c2cb]/30">
                 {entry.feedback}
               </p>
             </div>
@@ -182,7 +186,7 @@ export default function WritingHistoryPage() {
           </p>
           <Link
             href="/login"
-            className="mt-4 inline-block rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
+            className="mt-4 inline-block rounded-full bg-[#50c2cb] px-4 py-2 text-sm font-semibold text-white hover:bg-[#46adb5]"
           >
             ログイン
           </Link>
@@ -215,7 +219,7 @@ export default function WritingHistoryPage() {
             </p>
             <Link
               href="/writing"
-              className="mt-4 inline-block rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
+              className="mt-4 inline-block rounded-full bg-[#50c2cb] px-4 py-2 text-sm font-semibold text-white hover:bg-[#46adb5]"
             >
               ライティングを始める
             </Link>

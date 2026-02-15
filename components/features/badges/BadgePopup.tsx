@@ -38,7 +38,7 @@ export function BadgePopup({ badge, onClose }: BadgePopupProps) {
             <button
               type="button"
               onClick={() => void onClose()}
-              className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
+              className="flex-1 rounded-full bg-[#50c2cb] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#46adb5]"
             >
               OK
             </button>

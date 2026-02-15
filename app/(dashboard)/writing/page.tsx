@@ -90,6 +90,27 @@ export default function WritingPage() {
               </span>
             </Link>
 
+            {(selectedLevel === "2級" || selectedLevel === "準1級" || selectedLevel === "1級") && (
+              <>
+                <p className="pt-2 text-xs font-medium text-slate-500">要約</p>
+                <Link
+                  href={`/writing/summary?level=${selectedLevel}`}
+                  className={`flex flex-col gap-2 rounded-xl border border-slate-200 p-5 transition-colors ${MODULE_COLORS.writing.bgHover}`}
+                >
+                  <span className="text-sm font-medium text-slate-900">
+                    要約（{selectedLevel}）
+                  </span>
+                  <span className="text-xs text-slate-600">
+                    {selectedLevel === "2級"
+                      ? "英文を読んで45〜55語で要約します。2024年度から新設の形式。"
+                      : selectedLevel === "準1級"
+                        ? "英文を読んで60〜70語で要約します。2024年度から導入。"
+                        : "英文を読んで90〜110語で要約します。2024年度から導入。"}
+                  </span>
+                </Link>
+              </>
+            )}
+
             {(selectedLevel === "3級" || selectedLevel === "準2級") && (
               <>
                 <p className="pt-2 text-xs font-medium text-slate-500">Eメール</p>

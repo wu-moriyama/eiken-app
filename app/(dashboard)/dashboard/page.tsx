@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DashboardHeader } from "@/components/features/dashboard/DashboardHeader";
-import { TodayPlanCard } from "@/components/features/dashboard/TodayPlanCard";
 import { StatsGrid } from "@/components/features/dashboard/StatsGrid";
 import { LearningModulesGrid } from "@/components/features/dashboard/LearningModulesGrid";
 import { BadgePopup } from "@/components/features/badges/BadgePopup";
@@ -16,7 +15,6 @@ import {
 import {
   getTodayStudySeconds,
   getStreak,
-  getModuleActivityCounts,
   getTotalStudySeconds
 } from "@/lib/data/study-activity";
 import {
@@ -55,9 +53,6 @@ export default function DashboardPage() {
     mastered: number;
     total: number;
   } | null>(null);
-  const [activityCounts, setActivityCounts] = useState<
-    Record<string, number>
-  >({});
   const [writingCount, setWritingCount] = useState<number | null>(null);
   const [badgePopup, setBadgePopup] = useState<UserBadge | null>(null);
   const [examCountdown, setExamCountdown] = useState<{
@@ -117,7 +112,6 @@ export default function DashboardPage() {
       seconds,
       streak,
       proficiency,
-      counts,
       wCount,
       vocabSessions,
       totalWriting,
@@ -126,7 +120,6 @@ export default function DashboardPage() {
       getTodayStudySeconds(profileId),
       getStreak(profileId),
       getVocabularyProficiency(profileId, targetLevel),
-      getModuleActivityCounts(profileId),
       getWritingSubmissionCount(profileId, targetLevel, 7),
       getVocabularyQuizSessionCount(profileId),
       getTotalWritingCount(profileId),
@@ -135,7 +128,6 @@ export default function DashboardPage() {
     setTodayStudyMinutes(Math.round(seconds / 60));
     setStreakDays(streak.current);
     setVocabProficiency(proficiency);
-    setActivityCounts(counts);
     setWritingCount(wCount);
 
     const newlyEarned = await checkAndEarnBadges(profileId, {
@@ -266,15 +258,11 @@ export default function DashboardPage() {
           )}
           <Link
             href="/profile"
-            className="text-blue-600 hover:text-blue-500 hover:underline"
+            className="text-[#50c2cb] hover:text-[#46adb5] hover:underline"
           >
             目標を変更 →
           </Link>
         </div>
-        <TodayPlanCard
-          targetLevel={targetLevel}
-          activityCounts={activityCounts}
-        />
         <StatsGrid
           targetLevel={targetLevel}
           vocabProficiency={vocabProficiency}

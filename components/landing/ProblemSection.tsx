@@ -28,7 +28,7 @@ export function ProblemSection() {
           ))}
         </ul>
         <p className="mt-8 text-lg font-medium text-slate-700">
-          だから、<span className="text-blue-600">ひとつのプラットフォーム</span>で
+          だから、<span className="text-[#50c2cb]">ひとつのプラットフォーム</span>で
           <br className="sm:hidden" />
           全部まとめて対策できると便利ですよね。
         </p>

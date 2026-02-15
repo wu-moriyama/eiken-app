@@ -13,7 +13,8 @@ const LEVELS = ["3級", "準2級", "2級", "準1級", "1級"];
 const PROMPT_TYPES = [
   { value: "", label: "すべて" },
   { value: "essay", label: "英作文" },
-  { value: "email", label: "Eメール" }
+  { value: "email", label: "Eメール" },
+  { value: "summary", label: "要約" }
 ];
 
 export default function AdminWritingPage() {
@@ -200,7 +201,11 @@ export default function AdminWritingPage() {
                 <td className="px-4 py-3 font-mono text-sm text-slate-300">{v.id}</td>
                 <td className="px-4 py-3 text-slate-400">{v.level}</td>
                 <td className="px-4 py-3 text-slate-400">
-                  {v.prompt_type === "email" ? "Eメール" : "英作文"}
+                  {v.prompt_type === "email"
+                    ? "Eメール"
+                    : v.prompt_type === "summary"
+                      ? "要約"
+                      : "英作文"}
                 </td>
                 <td className="px-4 py-3 font-medium text-slate-200">{v.title}</td>
                 <td className="px-4 py-3 text-slate-500 text-xs">

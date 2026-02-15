@@ -31,7 +31,12 @@ export async function POST(request: NextRequest) {
 
     const result: WritingFeedbackResult = await gradeWriting({
       level: String(level),
-      promptType: promptType === "email" ? "email" : "essay",
+      promptType:
+        promptType === "email"
+          ? "email"
+          : promptType === "summary"
+            ? "summary"
+            : "essay",
       promptText: String(promptText),
       userContent: String(userContent),
       wordCountMin:

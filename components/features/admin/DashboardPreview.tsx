@@ -1,7 +1,6 @@
 "use client";
 
 import { DashboardHeader } from "@/components/features/dashboard/DashboardHeader";
-import { TodayPlanCard } from "@/components/features/dashboard/TodayPlanCard";
 import { StatsGrid } from "@/components/features/dashboard/StatsGrid";
 import { LearningModulesGrid } from "@/components/features/dashboard/LearningModulesGrid";
 
@@ -38,10 +37,6 @@ export function DashboardPreview({ backgroundImageUrl }: DashboardPreviewProps) 
               <span className="font-semibold text-slate-900">英検2級</span>
             </span>
           </div>
-          <TodayPlanCard
-            targetLevel="英検2級"
-            activityCounts={{ vocabulary_quiz: 2, writing: 0 }}
-          />
           <StatsGrid
             targetLevel="英検2級"
             vocabProficiency={{ percentage: 45, mastered: 90, total: 200 }}

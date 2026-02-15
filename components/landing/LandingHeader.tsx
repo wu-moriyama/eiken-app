@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export function LandingHeader() {
   return (
@@ -8,12 +9,16 @@ export function LandingHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link
           href="/"
-          className="flex items-center gap-2 text-sm font-bold text-slate-900"
+          className="flex items-center"
         >
-          <span className="rounded-md bg-blue-600 px-2 py-0.5 text-xs text-white">
-            EIKEN
-          </span>
-          <span className="hidden sm:inline">英検対策オールインワン</span>
+          <Image
+            src="/logo-aiken.png"
+            alt="AiKen"
+            width={120}
+            height={36}
+            className="h-9 w-auto"
+            priority
+          />
         </Link>
         <div className="flex items-center gap-2">
           <Link
@@ -24,7 +29,7 @@ export function LandingHeader() {
           </Link>
           <Link
             href="/signup"
-            className="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"
+            className="rounded-full bg-[#50c2cb] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#46adb5]"
           >
             会員登録
           </Link>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export function LandingFooter() {
   return (
@@ -8,12 +9,15 @@ export function LandingFooter() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
         <Link
           href="/"
-          className="flex items-center gap-2 text-sm font-bold text-slate-900"
+          className="flex items-center"
         >
-          <span className="rounded-md bg-blue-600 px-2 py-0.5 text-xs text-white">
-            EIKEN
-          </span>
-          英検対策オールインワン
+          <Image
+            src="/logo-aiken.png"
+            alt="AiKen"
+            width={120}
+            height={36}
+            className="h-9 w-auto"
+          />
         </Link>
         <div className="flex gap-6 text-sm text-slate-600">
           <Link href="/login" className="hover:text-slate-900">
@@ -25,7 +29,7 @@ export function LandingFooter() {
         </div>
       </div>
       <p className="mt-6 text-center text-xs text-slate-500">
-        © 2025 英検対策オールインワン
+        © 2025 AiKen
       </p>
     </footer>
   );

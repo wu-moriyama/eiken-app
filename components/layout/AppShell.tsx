@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
@@ -201,10 +202,16 @@ export function AppShell({ children }: AppShellProps) {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Link
             href={logoHref}
-            className="flex items-center gap-2 text-sm font-bold text-slate-900"
+            className="flex items-center"
           >
-            <span className="rounded-md bg-brand-500 px-2 py-1 text-xs text-white">EIKEN</span>
-            <span className="hidden sm:inline">英検対策オールインワン</span>
+            <Image
+              src="/logo-aiken.png"
+              alt="AiKen"
+              width={120}
+              height={36}
+              className="h-9 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}

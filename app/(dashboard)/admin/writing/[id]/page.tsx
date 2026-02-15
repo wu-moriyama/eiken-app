@@ -17,7 +17,7 @@ export default function AdminWritingEditPage() {
   const id = Number(params.id);
 
   const [level, setLevel] = useState("2級");
-  const [promptType, setPromptType] = useState<"essay" | "email">("essay");
+  const [promptType, setPromptType] = useState<"essay" | "email" | "summary">("essay");
   const [title, setTitle] = useState("");
   const [prompt, setPrompt] = useState("");
   const [wordCountMin, setWordCountMin] = useState("");
@@ -37,7 +37,7 @@ export default function AdminWritingEditPage() {
           return;
         }
         setLevel(data.level ?? "2級");
-        setPromptType((data.prompt_type as "essay" | "email") ?? "essay");
+        setPromptType((data.prompt_type as "essay" | "email" | "summary") ?? "essay");
         setTitle(data.title ?? "");
         setPrompt(data.prompt ?? "");
         setWordCountMin(data.word_count_min != null ? String(data.word_count_min) : "");
@@ -136,11 +136,12 @@ export default function AdminWritingEditPage() {
             <label className="mb-1 block text-xs font-medium text-slate-400">形式 *</label>
             <select
               value={promptType}
-              onChange={(e) => setPromptType(e.target.value as "essay" | "email")}
+              onChange={(e) => setPromptType(e.target.value as "essay" | "email" | "summary")}
               className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-brand-500"
             >
               <option value="essay">英作文</option>
               <option value="email">Eメール</option>
+              <option value="summary">要約（2級）</option>
             </select>
           </div>
         </div>

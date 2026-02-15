@@ -35,7 +35,12 @@ function HistoryCard({
   expanded: boolean;
   onToggle: () => void;
 }) {
-  const typeLabel = entry.promptType === "email" ? "Eメール" : "英作文";
+  const typeLabel =
+    entry.promptType === "email"
+      ? "Eメール"
+      : entry.promptType === "summary"
+        ? "要約"
+        : "英作文";
   return (
     <div className="rounded-xl border border-slate-700 bg-slate-900/50 overflow-hidden">
       <button

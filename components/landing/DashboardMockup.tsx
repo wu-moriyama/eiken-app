@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { MODULE_COLORS, type ModuleKey } from "@/lib/constants/module-colors";
 
 /** LP用：ダッシュボード風のプレビューモックアップ */
@@ -14,10 +15,13 @@ export function DashboardMockup() {
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl ring-1 ring-slate-900/5">
       {/* 簡易ヘッダー */}
       <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-4 py-2">
-        <span className="rounded-md bg-[#3B82F6] px-2 py-0.5 text-[10px] font-bold text-white">
-          EIKEN
-        </span>
-        <span className="text-[10px] text-slate-400">英検対策オールインワン</span>
+        <Image
+          src="/logo-aiken.png"
+          alt="AiKen"
+          width={80}
+          height={24}
+          className="h-6 w-auto"
+        />
       </div>
 
       <div className="space-y-3 p-4">

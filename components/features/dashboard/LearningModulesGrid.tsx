@@ -4,14 +4,14 @@ import { MODULE_COLORS, type ModuleKey } from "@/lib/constants/module-colors";
 const MODULES = [
   {
     key: "vocabulary",
-    title: "単語学習",
+    titleEn: "Vocabulary",
     description: "フラッシュカードと SRS で効率よく暗記。",
     badge: "毎日の基本",
     href: "/vocabulary"
   },
   {
     key: "writing",
-    title: "ライティング",
+    titleEn: "Writing",
     description: "AI 添削で文法・構成・語彙をフィードバック。",
     badge: "AI 添削",
     href: "/writing",
@@ -19,7 +19,7 @@ const MODULES = [
   },
   {
     key: "speaking",
-    title: "スピーキング",
+    titleEn: "Speaking",
     description: "面接形式のロールプレイでアウトプット練習。",
     badge: "音声入力",
     href: "/speaking",
@@ -27,14 +27,14 @@ const MODULES = [
   },
   {
     key: "listening",
-    title: "リスニング",
+    titleEn: "Listening",
     description: "速度調整やディクテーションで耳を鍛える。",
     badge: "音声教材",
     href: "/listening"
   },
   {
     key: "reading",
-    title: "リーディング",
+    titleEn: "Reading",
     description: "長文読解と要約で読解力をアップ。",
     badge: "長文対策",
     href: "/reading"
@@ -62,33 +62,33 @@ export function LearningModulesGrid({ targetLevel }: LearningModulesGridProps) {
         {modules.map((m) => {
           const colors = MODULE_COLORS[m.key as ModuleKey];
           return (
-            <article
+            <Link
               key={m.key}
-              className={`flex flex-col justify-between rounded-2xl border-l-4 ${colors.borderLeft} border border-slate-200 bg-white p-4 text-sm shadow-sm`}
+              href={m.href}
+              className={`flex flex-col justify-between rounded-2xl border-l-4 ${colors.borderLeft} border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-lg ${colors.hoverBg}`}
             >
               <div className="space-y-2">
                 <div
-                  className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-[3px] text-[10px] font-medium ${colors.badge}`}
+                  className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-xs font-medium ${colors.badge}`}
                 >
                   <span>{m.badge}</span>
                 </div>
-                <h3 className="text-sm font-semibold text-slate-900">
-                  {m.title}
+                <h3 className={`text-xl font-bold ${colors.text}`}>
+                  {m.titleEn}
                 </h3>
-                <p className="text-xs text-slate-600">{m.description}</p>
+                <p className="text-sm leading-relaxed text-slate-600">{m.description}</p>
               </div>
-              <div className="mt-3">
-                <Link
-                  href={m.href}
-                  className={`inline-flex items-center text-xs font-semibold ${colors.text} ${colors.textHover}`}
+              <div className="mt-4">
+                <span
+                  className={`inline-flex items-center text-sm font-semibold ${colors.text}`}
                 >
                   開く
                   <span aria-hidden="true" className="ml-1">
                     →
                   </span>
-                </Link>
+                </span>
               </div>
-            </article>
+            </Link>
           );
         })}
       </div>

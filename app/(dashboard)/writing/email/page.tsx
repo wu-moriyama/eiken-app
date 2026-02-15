@@ -279,7 +279,7 @@ function WritingEmailContent() {
             </p>
             <Link
               href="/writing"
-              className="mt-4 inline-block text-sm text-blue-600 hover:underline"
+              className="mt-4 inline-block text-sm text-[#50c2cb] hover:underline"
             >
               ← 形式選択に戻る
             </Link>
@@ -394,7 +394,7 @@ function WritingEmailContent() {
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="ここに解答を入力してください..."
                   rows={5}
-                  className="mt-2 w-full rounded border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="mt-2 w-full rounded border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#50c2cb] focus:outline-none focus:ring-1 focus:ring-[#50c2cb]"
                 />
               )}
               <p className="mt-2 text-sm text-slate-800">Best wishes,</p>

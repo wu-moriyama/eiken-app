@@ -329,7 +329,7 @@ export default function ProfilePage() {
           <button
             type="button"
             onClick={() => router.push("/login")}
-            className="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
+            className="inline-flex items-center justify-center rounded-full bg-[#50c2cb] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#46adb5]"
           >
             ログインページへ移動
           </button>
@@ -360,7 +360,7 @@ export default function ProfilePage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={!canEditEmail}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200 disabled:bg-slate-100 disabled:text-slate-500"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200 disabled:bg-slate-100 disabled:text-slate-500"
             />
             {!canEditEmail && (
               <p className="text-[11px] text-slate-500">
@@ -378,7 +378,7 @@ export default function ProfilePage() {
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
               placeholder="例）もりやま、Taro など"
             />
           </div>
@@ -485,7 +485,7 @@ export default function ProfilePage() {
                       }}
                       className={`flex h-10 w-10 items-center justify-center rounded-full border text-lg ${
                         avatarStyle === a.id
-                          ? "border-blue-500 shadow-sm"
+                          ? "border-brand-500 shadow-sm"
                           : "border-slate-200"
                       } ${a.bg} ${a.fg}`}
                     >
@@ -513,7 +513,7 @@ export default function ProfilePage() {
                           }}
                           className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border ${
                             isSelected
-                              ? "border-blue-500 shadow-sm ring-2 ring-blue-200"
+                              ? "border-brand-500 shadow-sm ring-2 ring-brand-200"
                               : "border-slate-200"
                           }`}
                           title={a.name}
@@ -540,7 +540,7 @@ export default function ProfilePage() {
             <select
               value={targetLevel}
               onChange={(e) => setTargetLevel(e.target.value as LevelOption)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
             >
               {LEVEL_OPTIONS.map((level) => (
                 <option key={level} value={level}>
@@ -570,7 +570,7 @@ export default function ProfilePage() {
                   setSecondaryDate("");
                 }
               }}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
             >
               <option value="">選択してください</option>
               {examOptions.map((opt) => (
@@ -593,7 +593,7 @@ export default function ProfilePage() {
                       type="date"
                       value={primaryDate}
                       onChange={(e) => setPrimaryDate(e.target.value)}
-                      className="mt-0.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400"
+                      className="mt-0.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-brand-400"
                     />
                   </div>
                   <div>
@@ -604,7 +604,7 @@ export default function ProfilePage() {
                       type="date"
                       value={secondaryDate}
                       onChange={(e) => setSecondaryDate(e.target.value)}
-                      className="mt-0.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400"
+                      className="mt-0.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-brand-400"
                     />
                   </div>
                 </div>
@@ -630,7 +630,7 @@ export default function ProfilePage() {
           <button
             type="submit"
             disabled={isSaving}
-            className="flex w-full items-center justify-center rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-60"
+            className="flex w-full items-center justify-center rounded-full bg-[#50c2cb] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#46adb5] disabled:opacity-60"
           >
             {isSaving ? "保存中..." : "プロフィールを保存"}
           </button>

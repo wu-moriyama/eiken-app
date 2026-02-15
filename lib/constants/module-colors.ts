@@ -2,7 +2,7 @@
  * 学習モジュールごとの固定カラー（カラーチャート準拠）
  * 単語・ライティング・リーディング・リスニング・スピーキングをカラフルに区別
  *
- * チャートの色: #A77CBF(紫) #F57A9C(ピンク) #F99F66(オレンジ) #FFD758(黄) #A6D472(緑) #31B5D1(青)
+ * チャートの色: #A77CBF(紫) #F57A9C(ピンク) #F99F66(オレンジ) #FFD758(黄) #A6D472(緑) #50c2cb(青・キーカラー)
  */
 export type ModuleKey =
   | "vocabulary"
@@ -26,6 +26,8 @@ export const MODULE_COLORS: Record<
     borderLeft: string;
     /** カードホバー時の背景 */
     bgHover: string;
+    /** カードホバー時のみ背景色（border変更なし） */
+    hoverBg: string;
     /** ドット・インディケータ */
     dot: string;
     /** 暗めの背景（カード全体など） */
@@ -46,6 +48,7 @@ export const MODULE_COLORS: Record<
     border: "border-[#F99F66]/50",
     borderLeft: "border-l-[#F99F66]",
     bgHover: "hover:border-[#F99F66]/50 hover:bg-[#F99F66]/10",
+    hoverBg: "hover:bg-[#F99F66]/8",
     dot: "bg-[#F99F66]",
     bg: "bg-[#F99F66]/10",
     accent: "text-[#F99F66]",
@@ -60,6 +63,7 @@ export const MODULE_COLORS: Record<
     border: "border-[#A6D472]/50",
     borderLeft: "border-l-[#A6D472]",
     bgHover: "hover:border-[#A6D472]/50 hover:bg-[#A6D472]/15",
+    hoverBg: "hover:bg-[#A6D472]/8",
     dot: "bg-[#A6D472]",
     bg: "bg-[#A6D472]/15",
     accent: "text-[#A6D472]",
@@ -68,18 +72,19 @@ export const MODULE_COLORS: Record<
     solidHover: "hover:bg-[#96C462]"
   },
   reading: {
-    badge: "bg-[#31B5D1]/20 text-[#1E7A8F] border-[#31B5D1]/40",
-    text: "text-[#2899B0]",
-    textHover: "hover:text-[#31B5D1]",
-    border: "border-[#31B5D1]/50",
-    borderLeft: "border-l-[#31B5D1]",
-    bgHover: "hover:border-[#31B5D1]/50 hover:bg-[#31B5D1]/10",
-    dot: "bg-[#31B5D1]",
-    bg: "bg-[#31B5D1]/10",
-    accent: "text-[#31B5D1]",
-    accentHover: "hover:text-[#5CC5DC]",
-    solid: "bg-[#31B5D1]",
-    solidHover: "hover:bg-[#2A9FB8]"
+    badge: "bg-[#50c2cb]/20 text-[#2a6e73] border-[#50c2cb]/40",
+    text: "text-[#46adb5]",
+    textHover: "hover:text-[#50c2cb]",
+    border: "border-[#50c2cb]/50",
+    borderLeft: "border-l-[#50c2cb]",
+    bgHover: "hover:border-[#50c2cb]/50 hover:bg-[#50c2cb]/10",
+    hoverBg: "hover:bg-[#50c2cb]/8",
+    dot: "bg-[#50c2cb]",
+    bg: "bg-[#50c2cb]/10",
+    accent: "text-[#50c2cb]",
+    accentHover: "hover:text-[#66cfd5]",
+    solid: "bg-[#50c2cb]",
+    solidHover: "hover:bg-[#46adb5]"
   },
   listening: {
     badge: "bg-[#A77CBF]/25 text-[#7A5A94] border-[#A77CBF]/50",
@@ -88,6 +93,7 @@ export const MODULE_COLORS: Record<
     border: "border-[#A77CBF]/50",
     borderLeft: "border-l-[#A77CBF]",
     bgHover: "hover:border-[#A77CBF]/50 hover:bg-[#A77CBF]/15",
+    hoverBg: "hover:bg-[#A77CBF]/8",
     dot: "bg-[#A77CBF]",
     bg: "bg-[#A77CBF]/15",
     accent: "text-[#A77CBF]",
@@ -102,6 +108,7 @@ export const MODULE_COLORS: Record<
     border: "border-[#F57A9C]/50",
     borderLeft: "border-l-[#F57A9C]",
     bgHover: "hover:border-[#F57A9C]/50 hover:bg-[#F57A9C]/15",
+    hoverBg: "hover:bg-[#F57A9C]/8",
     dot: "bg-[#F57A9C]",
     bg: "bg-[#F57A9C]/15",
     accent: "text-[#F57A9C]",

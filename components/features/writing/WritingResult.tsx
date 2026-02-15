@@ -123,7 +123,7 @@ export interface WritingResultData {
 interface WritingResultProps {
   data: WritingResultData;
   level: string;
-  promptType: "essay" | "email";
+  promptType: "essay" | "email" | "summary";
   onNewProblem?: () => void;
 }
 
@@ -241,7 +241,11 @@ export function WritingResult({ data, level, promptType, onNewProblem }: Writing
           </button>
         ) : (
           <Link
-            href={`/writing/${promptType}${promptType === "essay" ? "?level=" + encodeURIComponent(level) : ""}`}
+            href={
+              promptType === "summary"
+                ? `/writing/summary?level=${encodeURIComponent(level)}`
+                : `/writing/${promptType}${promptType === "essay" ? "?level=" + encodeURIComponent(level) : ""}`
+            }
             className="rounded-full border border-slate-300 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50"
           >
             別の問題に挑戦

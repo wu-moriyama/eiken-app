@@ -15,7 +15,7 @@ export interface EmailPromptData {
 export interface WritingPrompt {
   id: number;
   level: string;
-  prompt_type: "essay" | "email";
+  prompt_type: "essay" | "email" | "summary";
   title: string;
   prompt: string;
   word_count_min: number | null;
@@ -43,6 +43,34 @@ export async function fetchRandomEssayPrompt(
     id: row.id,
     level: row.level ?? "",
     prompt_type: "essay",
+    title: row.title ?? "",
+    prompt: row.prompt ?? "",
+    word_count_min: row.word_count_min ?? null,
+    word_count_max: row.word_count_max ?? null,
+    time_limit_min_seconds: row.time_limit_min_seconds ?? null,
+    time_limit_max_seconds: row.time_limit_max_seconds ?? null
+  };
+}
+
+/** 要約問題のプロンプトを1件ランダム取得（2級のみ） */
+export async function fetchRandomSummaryPrompt(
+  level: string
+): Promise<WritingPrompt | null> {
+  const { data, error } = await supabase
+    .from("writing_prompts")
+    .select("*")
+    .eq("level", level)
+    .eq("prompt_type", "summary")
+    .limit(50);
+
+  if (error || !data || data.length === 0) return null;
+
+  const idx = Math.floor(Math.random() * data.length);
+  const row = data[idx];
+  return {
+    id: row.id,
+    level: row.level ?? "",
+    prompt_type: "summary",
     title: row.title ?? "",
     prompt: row.prompt ?? "",
     word_count_min: row.word_count_min ?? null,
@@ -137,7 +165,7 @@ export interface WritingHistoryEntry {
   id: number;
   promptId: number;
   level: string;
-  promptType: "essay" | "email";
+  promptType: "essay" | "email" | "summary";
   title: string;
   prompt: string;
   content: string;
@@ -203,9 +231,11 @@ export async function getWritingHistory(
       id: row.id,
       promptId: row.prompt_id,
       level: p?.level ?? "",
-      promptType: (p?.prompt_type === "email" ? "email" : "essay") as
-        | "essay"
-        | "email",
+      promptType: (p?.prompt_type === "email"
+        ? "email"
+        : p?.prompt_type === "summary"
+          ? "summary"
+          : "essay") as "essay" | "email" | "summary",
       title: p?.title ?? "",
       prompt: p?.prompt ?? "",
       content: row.content ?? "",

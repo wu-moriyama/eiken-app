@@ -17,7 +17,8 @@ export function WritingHintPanel({
   onClose,
 }: WritingHintPanelProps) {
   const hint = getWritingHint(type, level);
-  const label = type === "essay" ? "英作文" : "Eメール";
+  const label =
+    type === "essay" ? "英作文" : type === "summary" ? "要約" : "Eメール";
 
   useEffect(() => {
     if (isOpen) {

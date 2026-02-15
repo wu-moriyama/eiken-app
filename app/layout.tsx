@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "英検対策オールインワン | Eiken App",
+  title: "AiKen | 英検対策アプリ",
   description: "英検5級〜1級まで対応した総合学習プラットフォーム"
 };
 

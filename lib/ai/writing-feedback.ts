@@ -20,7 +20,7 @@ export interface WritingFeedbackResult {
 
 export interface WritingFeedbackInput {
   level: string;
-  promptType: "essay" | "email";
+  promptType: "essay" | "email" | "summary";
   promptText: string;
   userContent: string;
   wordCountMin: number | null;
@@ -48,8 +48,19 @@ export async function gradeWriting(
       ? `${input.wordCountMin}〜${input.wordCountMax}語`
       : "指示に従った語数";
 
+  const isSummary = input.promptType === "summary";
+  const summaryNote = isSummary
+    ? `
+This is a SUMMARY task (要約). The student read a passage and wrote a summary in 45-55 words.
+- content_score: Did they accurately capture the main points from each paragraph? No personal opinion.
+- organization_score: Is the summary logically structured and easy to follow?
+- instruction_score: 45-55 words, accurate summarization (not opinion essay), covers key points from the original.
+`
+    : "";
+
   const systemPrompt = `You are an expert Eiken (Japanese English proficiency test) writing grader.
-Grade the student's writing according to the specified level.
+Grade the student's writing according to the specified level.${summaryNote}
+
 Level criteria:
 - 3級: Junior high school 3rd year level. Be encouraging; focus on basic correctness.
 - 準2級: High school intermediate. Expect simple but coherent essays.
@@ -77,7 +88,7 @@ Grade and return a JSON object with:
 - grammar_score (0-5)
 - content_score (0-5): Did they answer the question appropriately?
 - organization_score (0-5): Logical structure, flow
-- instruction_score (0-5): Followed instructions (word count, format, number of reasons/points as required)
+- instruction_score (0-5): Followed instructions (word count, format; for summary: accurate summarization, 45-55 words, no personal opinion)
 - corrected_text: The student's essay with only grammar/spelling corrections. Wrap each corrected word/phrase in [[...]]. Example: "they may [[spend]] too much" and "[[healthier]] lifestyles"
 - feedback: Japanese text, 2-4 sentences. Mention specific improvements (e.g. "spends" → "spend", "more healthier" → "healthier").`;
 

@@ -22,21 +22,21 @@ const config: Config = {
         module: {
           vocabulary: "#F99F66", // オレンジ
           writing: "#A6D472", // グリーン
-          reading: "#31B5D1", // ブルー
+          reading: "#50c2cb", // ブルー（キーカラー）
           listening: "#A77CBF", // パープル
           speaking: "#F57A9C" // ピンク
         },
         brand: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a"
+          50: "#e8f8f9",
+          100: "#cceff1",
+          200: "#99dfe3",
+          300: "#66cfd5",
+          400: "#50c2cb",
+          500: "#46adb5",
+          600: "#3d989f",
+          700: "#338389",
+          800: "#2a6e73",
+          900: "#20595d"
         }
       }
     }
